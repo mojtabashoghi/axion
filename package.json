@@ -1,13 +1,9 @@
-axion/                  <-- پوشه اصلی
-├── main.js             <-- فایل اجرایی اصلی (اجباری برای Release)
-├── manifest.json       <-- تنظیمات Obsidian (اجباری برای Release)
-├── styles.css          <-- ظاهر پلاگین (اجباری برای Release)
-├── README.md           <-- توضیحات
-├── README_fa.md
-├── USER_GUIDE.md
-├── USER_GUIDE_fa.md
-├── LICENSE.md
-├── CHANGELOG.md
-└── icons/              <-- پوشه آیکون‌ها
-    ├── sticky.svg
-    └── ...
+{
+  "name": "axion",
+  "version": "2.5.1",
+  "description": "Study and research PDF files: highlights and OCR become colour-coded sticky notes with translation, offline read-aloud, voice notes, flashcards with Anki export, and a Pomodoro timer.",
+  "main": "main.js",
+  "license": "MIT",
+  "author": "Mojtaba Shoghi Samani",
+  "private": true
+}
