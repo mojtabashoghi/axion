@@ -1,7 +1,7 @@
 {
   "id": "axion",
   "name": "Axion",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "minAppVersion": "1.4.0",
   "description": "Study and research PDF files: highlights and OCR become colour-coded sticky notes with translation (Persian, English, German, French), offline read-aloud, voice notes, flashcards with Anki export, and a Pomodoro timer.",
   "author": "Mojtaba Shoghi Samani",
