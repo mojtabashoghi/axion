@@ -1,0 +1,3014 @@
+/* Obsidian's own hover tooltip (the little dark box that shows a button's aria-label) sits below our PDF
+   toolbar/menus/popups by default, so it used to render half-hidden behind them. Bringing it to the very top
+   layer instead of trying to suppress it (tried that before - it did not actually stop it from appearing). */
+.tooltip {
+  z-index: 100000 !important;
+}
+
+/* ------------------------------------------------------------------ */
+
+/* Play button (in front of every non-Persian line of a box)           */
+
+/* ------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------ */
+
+/* Coloured boxes: one box per paste                                   */
+
+/*   word = yellow, sentence = light green, image = blue               */
+
+/* ------------------------------------------------------------------ */
+
+.callout[data-callout="lc-word"],
+.callout[data-callout="lc-sentence"],
+.callout[data-callout="lc-image"] {
+  mix-blend-mode: normal;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  padding: 8px 16px;
+  color: #000;
+  overflow: hidden;
+}
+
+.callout[data-callout="lc-word"] {
+  background-color: #fff3a6 !important;
+}
+
+.callout[data-callout="lc-sentence"] {
+  background-color: #d9f6d0 !important;
+}
+
+.callout[data-callout="lc-image"] {
+  background-color: #d4e6ff !important;
+}
+
+/* The title line only carries the box type: hide it. */
+
+.callout[data-callout="lc-word"] > .callout-title,
+.callout[data-callout="lc-sentence"] > .callout-title,
+.callout[data-callout="lc-image"] > .callout-title {
+  display: none;
+}
+
+.callout[data-callout="lc-word"] > .callout-content,
+.callout[data-callout="lc-sentence"] > .callout-content,
+.callout[data-callout="lc-image"] > .callout-content {
+  padding: 0;
+  color: #000;
+}
+
+.callout[data-callout="lc-word"] .callout-content p,
+.callout[data-callout="lc-sentence"] .callout-content p {
+  margin: 0.3em 0;
+  text-align: start;
+  unicode-bidi: plaintext; /* Persian lines run right-to-left on their own */
+}
+
+.callout[data-callout="lc-image"] img {
+  max-width: 100%;
+  border-radius: 8px;
+  display: block;
+}
+
+/* Line colours: original = black, translation 1 = red, translation 2 = blue */
+
+.ln-o {
+  color: #000;
+}
+
+.ln-1 {
+  color: #d00000;
+}
+
+.ln-2 {
+  color: #0a3fd6;
+}
+
+.ln.rtl {
+  font-family: var(--font-text);
+  line-height: 1.9;
+}
+
+/* ------------------------------------------------------------------ */
+
+/* Player bar above the note                                           */
+
+/* ------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------ */
+
+/* Settings: Translation section                                       */
+
+/* ------------------------------------------------------------------ */
+
+.lc-intro {
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+  margin: 0 0 12px;
+}
+
+.lc-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.lc-pbox {
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  padding: 8px 14px 10px;
+  color: #000;
+}
+
+.lc-pbox-word {
+  background: #fff3a6;
+}
+
+.lc-pbox-sentence {
+  background: #d9f6d0;
+}
+
+.lc-pbox-image {
+  background: #d4e6ff;
+}
+
+.lc-pbox-title {
+  font-size: 0.7em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.5);
+  margin-bottom: 4px;
+}
+
+.lc-pline {
+  margin: 3px 0;
+  unicode-bidi: plaintext;
+  text-align: start;
+}
+
+.lc-pline.rtl {
+  font-family: var(--font-text);
+}
+
+.lc-pimage {
+  margin-top: 6px;
+  padding: 18px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.lc-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.lc-card {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-secondary);
+}
+
+.lc-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.lc-card-hint {
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+  margin: 2px 0 8px;
+}
+
+.lc-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.lc-dot-red {
+  background: #d00000;
+}
+
+.lc-dot-blue {
+  background: #0a3fd6;
+}
+
+.lc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.lc-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+  cursor: pointer;
+  font-size: var(--font-ui-small);
+  user-select: none;
+}
+
+.lc-chip:hover {
+  border-color: var(--interactive-accent);
+}
+
+.lc-chip.is-on {
+  border-color: var(--interactive-accent);
+  background: var(--background-modifier-hover);
+  font-weight: 600;
+}
+
+.lc-chip input {
+  margin: 0;
+}
+
+.lc-chip-sub {
+  color: var(--text-faint);
+  font-size: 0.85em;
+  font-weight: 400;
+}
+
+/* ------------------------------------------------------------------ */
+
+/* Side panel (right sidebar): Player / Flashcards / Pomodoro          */
+
+/* ------------------------------------------------------------------ */
+
+.acp-panel {
+  padding: 0 !important;
+}
+
+.acp-sec {
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.acp-sec-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: var(--font-ui-small);
+  background: var(--background-secondary);
+  user-select: none;
+}
+
+.acp-sec-caret {
+  width: 1em;
+  color: var(--text-muted);
+}
+
+.acp-sec-tools {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 4px;
+}
+
+
+.acp-hint {
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+  margin-top: 4px;
+}
+
+.acp-center {
+  text-align: center;
+  justify-content: center;
+}
+
+.acp-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+/* player inside the panel: wraps onto several rows */
+
+/* flashcard review */
+
+.acp-counts {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-size: var(--font-ui-smaller);
+}
+
+.acp-count {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--background-modifier-hover);
+  color: var(--text-muted);
+}
+
+.acp-count-due {
+  color: #fff;
+  background: #d00000;
+}
+
+.acp-count-new {
+  color: #fff;
+  background: #0a3fd6;
+}
+
+.acp-card {
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  padding: 12px 14px;
+  color: #000;
+  font-size: 1.05em;
+}
+
+.acp-card-word {
+  background: #fff3a6;
+}
+
+.acp-card-sentence {
+  background: #d9f6d0;
+}
+
+.acp-card .ln {
+  margin: 5px 0;
+  unicode-bidi: plaintext;
+  text-align: start;
+}
+
+.acp-card-sep {
+  margin: 8px 0;
+  border-top: 1px dashed rgba(0, 0, 0, 0.3);
+}
+
+.acp-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.acp-wide {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.acp-grade {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: auto;
+  padding: 6px 2px;
+  border-top: 3px solid transparent;
+}
+
+.acp-grade-name {
+  font-weight: 600;
+}
+
+.acp-grade-int {
+  font-size: var(--font-ui-smaller);
+  color: var(--text-muted);
+}
+
+.acp-grade-again {
+  border-top-color: #d00000;
+}
+
+.acp-grade-hard {
+  border-top-color: #e08a00;
+}
+
+.acp-grade-good {
+  border-top-color: #2e9e5b;
+}
+
+.acp-grade-easy {
+  border-top-color: #0a3fd6;
+}
+
+.acp-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: var(--font-ui-smaller);
+}
+
+.acp-link {
+  color: var(--text-muted);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.acp-link:hover {
+  color: var(--text-normal);
+}
+
+.acp-danger:hover {
+  color: var(--text-error);
+}
+
+.acp-empty {
+  text-align: center;
+  padding: 18px 8px;
+}
+
+.acp-empty-title {
+  font-weight: 600;
+}
+
+/* pomodoro */
+
+.acp-pomo-ring {
+  width: 100%;
+  height: 100%;
+}
+
+.acp-pomo-bg {
+  fill: none;
+  stroke: var(--background-modifier-border);
+  stroke-width: 8;
+}
+
+.acp-pomo-fg {
+  fill: none;
+  stroke: #d00000;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.25s linear;
+}
+
+.is-break .acp-pomo-fg {
+  stroke: #2e9e5b;
+}
+
+.acp-pomo-mid {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.acp-pomo-clock {
+  font-size: 1.8em;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.acp-pomo-phase {
+  font-size: var(--font-ui-smaller);
+  color: var(--text-muted);
+}
+
+/* ------------------------------------------------------------------ */
+
+/* Settings: flashcard layout tiles                                    */
+
+/* ------------------------------------------------------------------ */
+
+.fc-sub {
+  margin: 18px 0 6px;
+}
+
+.fc-tiles {
+  align-items: start;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.fc-tile {
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 2px solid var(--background-modifier-border);
+  background: var(--background-secondary);
+  cursor: pointer;
+}
+
+.fc-tile:hover {
+  border-color: var(--interactive-accent-hover);
+}
+
+.fc-tile.is-selected {
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 1px var(--interactive-accent) inset;
+}
+
+.fc-tile-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.fc-stage {
+  margin-top: 8px;
+}
+
+.fc-stage-two {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: stretch;
+}
+
+.fc-arrow {
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.fc-mini {
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  padding: 8px 12px 10px;
+  color: #000;
+  cursor: default;
+}
+
+.fc-mini-word {
+  background: #fff3a6;
+}
+
+.fc-mini-title {
+  font-size: 0.7em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.5);
+  margin-bottom: 4px;
+}
+
+.fc-back-pick {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.3);
+}
+
+.fc-back-pick .lc-card-hint {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.fc-tile.is-inactive .fc-mini-back {
+  opacity: 0.7;
+}
+
+/* ================================================================== */
+
+/* Axion 1.6                                                    */
+
+/* ================================================================== */
+
+/* ---- sticky-note look (yellow / green boxes), switched by body.if-tilt ---- */
+
+/* folded bottom-right corner: a darker flap, and the page colour where the paper is cut away */
+
+/* ---- toolbar at the top of a box ---- */
+
+/* ---- player: big round buttons for touch screens ---- */
+
+/* ---- pomodoro: ring on the left, round buttons in a column on the right ---- */
+
+/* player rows inside the panel: [play stop time] / [slider] / [- speed +] / status */
+
+
+/* ================================================================== */
+/* Axion 1.7: icons, round buttons, sticky notes, heatmap        */
+/* ================================================================== */
+
+/* ---- icon set (masks, they take the colour of the text) ---- */
+.ico {
+  --ico: none;
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  background: currentColor;
+  -webkit-mask: var(--ico) center / contain no-repeat;
+  mask: var(--ico) center / contain no-repeat;
+}
+.ico-play {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 4.5v15l13-7.5z'/%3E%3C/svg%3E");
+}
+.ico-pause {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 4h4v16H6zM14 4h4v16h-4z'/%3E%3C/svg%3E");
+}
+.ico-stop {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='5.5' y='5.5' width='13' height='13' rx='2'/%3E%3C/svg%3E");
+}
+.ico-minus {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12h14' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.ico-plus {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12h14M12 5v14' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.ico-reset {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 12a9 9 0 1 0 3-6.7L3 8' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M3 3v5h5' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.ico-skip {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 4.5v15l10-7.5z'/%3E%3Cpath d='M19 5v14' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.ico-mic {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3z'/%3E%3Cpath d='M19 11a7 7 0 0 1-14 0M12 18v3' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.ico-trash {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.ico-close {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 6l12 12M18 6L6 18' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+
+/* ---- round icon buttons: one size everywhere (player, pomodoro) ---- */
+.acp-round {
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+  border: 1px solid var(--background-modifier-border);
+  box-shadow: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.acp-round:hover {
+  background: var(--background-modifier-border);
+}
+.acp-round-main,
+.acp-round-main:hover {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: transparent;
+}
+.acp-round-main:hover {
+  background: var(--interactive-accent-hover);
+}
+
+/* ---- pomodoro: ring on the left, one column of round buttons on the right ---- */
+.acp-pomo-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+.acp-pomo {
+  position: relative;
+  flex: 0 0 auto;
+  width: 136px;
+  height: 136px;
+  margin: 0;
+}
+.acp-pomo-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ---- lines of a box: round play button + text that wraps beside it ---- */
+.ln {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6em;
+}
+.ln.rtl {
+  direction: rtl;
+}
+.tts-btn,
+.lc-play-demo {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.12);
+  color: #2a2a2a;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0;
+  --ico-play: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 4.5v15l13-7.5z'/%3E%3C/svg%3E");
+}
+.tts-btn::before,
+.lc-play-demo::before {
+  content: "";
+  width: 11px;
+  height: 11px;
+  margin-left: 2px;
+  background: currentColor;
+  -webkit-mask: var(--ico-play) center / contain no-repeat;
+  mask: var(--ico-play) center / contain no-repeat;
+}
+.tts-btn:hover {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+
+/* ---- sticky notes (yellow / green boxes): straight, soft shadow, folded corner at the top left ---- */
+.if-sticky .callout[data-callout="lc-word"]:not(.if-popup),
+.if-sticky .callout[data-callout="lc-sentence"]:not(.if-popup) {
+  position: relative;
+  border-radius: 6px;
+  border: 0;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.22);
+  margin: 14px 6px;
+}
+.if-sticky .callout[data-callout="lc-word"]:not(.if-popup)::after,
+.if-sticky .callout[data-callout="lc-sentence"]:not(.if-popup)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 26px;
+  height: 26px;
+  background: linear-gradient(135deg, var(--background-primary) 50%, rgba(0, 0, 0, 0.2) 50%);
+  border-bottom-right-radius: 6px;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.14);
+  pointer-events: none;
+}
+
+/* ---- sticky-note colours (chosen with the circles in the toolbar) ---- */
+.callout[data-callout^="lc-"][data-callout-metadata~="yellow"] {
+  background-color: #fff3a6 !important;
+}
+.callout[data-callout^="lc-"][data-callout-metadata~="green"] {
+  background-color: #d9f6d0 !important;
+}
+.callout[data-callout^="lc-"][data-callout-metadata~="pink"] {
+  background-color: #ffd3df !important;
+}
+.callout[data-callout^="lc-"][data-callout-metadata~="blue"] {
+  background-color: #d4e6ff !important;
+}
+.callout[data-callout^="lc-"][data-callout-metadata~="orange"] {
+  background-color: #ffdcb0 !important;
+}
+.callout[data-callout^="lc-"][data-callout-metadata~="purple"] {
+  background-color: #e6d9ff !important;
+}
+
+/* ---- toolbar at the top of a box: colour circles on the left, action circles on the right ---- */
+.if-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  margin: 0 0 2px;
+}
+.callout .callout-content p:has(> .if-bar) {
+  margin: 0 0 2px;
+}
+.if-swatches,
+.if-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.if-swatches {
+  padding-right: 8px;
+  margin-right: 2px;
+  border-right: 1px solid rgba(0, 0, 0, 0.18);
+}
+.if-tool {
+  --if-ico: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.09);
+  cursor: pointer;
+  user-select: none;
+}
+.if-tool::before {
+  content: "";
+  width: 15px;
+  height: 15px;
+  background: #2a2a2a;
+  -webkit-mask: var(--if-ico) center / contain no-repeat;
+  mask: var(--if-ico) center / contain no-repeat;
+}
+.if-tool:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+.if-rec {
+  --if-ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3z'/%3E%3Cpath d='M19 11a7 7 0 0 1-14 0M12 18v3' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.if-play {
+  --if-ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 4.5v15l13-7.5z'/%3E%3C/svg%3E");
+}
+.if-trash {
+  --if-ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.if-close {
+  --if-ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 6l12 12M18 6L6 18' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.if-close:hover,
+.if-trash:hover {
+  background: #d00000;
+}
+.if-close:hover::before,
+.if-trash:hover::before {
+  background: #fff;
+}
+.if-tool.is-recording {
+  background: #d00000;
+  animation: if-pulse 1s ease-in-out infinite;
+}
+.if-tool.is-recording::before {
+  background: #fff;
+}
+@keyframes if-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+/* the colour circles */
+.if-sw {
+  width: 20px;
+  height: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+.if-sw::before {
+  display: none;
+}
+.if-sw[data-color="yellow"] {
+  background: #f6dc4e;
+}
+.if-sw[data-color="green"] {
+  background: #8fd97a;
+}
+.if-sw[data-color="pink"] {
+  background: #f58fae;
+}
+.if-sw[data-color="blue"] {
+  background: #7fb2f0;
+}
+.if-sw[data-color="orange"] {
+  background: #f6a94e;
+}
+.if-sw[data-color="purple"] {
+  background: #b394ee;
+}
+.if-sw:hover {
+  transform: scale(1.15);
+}
+/* ring around the colour that is in use (the chosen one, or the default of that box type) */
+.callout[data-callout-metadata~="yellow"] .if-sw[data-color="yellow"],
+.callout[data-callout-metadata~="green"] .if-sw[data-color="green"],
+.callout[data-callout-metadata~="pink"] .if-sw[data-color="pink"],
+.callout[data-callout-metadata~="blue"] .if-sw[data-color="blue"],
+.callout[data-callout-metadata~="orange"] .if-sw[data-color="orange"],
+.callout[data-callout-metadata~="purple"] .if-sw[data-color="purple"],
+.callout[data-callout="lc-word"]:is([data-callout-metadata=""], :not([data-callout-metadata])) .if-sw[data-color="yellow"],
+.callout[data-callout="lc-sentence"]:is([data-callout-metadata=""], :not([data-callout-metadata])) .if-sw[data-color="green"],
+.callout[data-callout="lc-image"]:is([data-callout-metadata=""], :not([data-callout-metadata])) .if-sw[data-color="blue"] {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #333;
+}
+
+/* ---- review heatmap ---- */
+.acp-heatmap {
+  overflow-x: auto;
+}
+.acp-hm-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.acp-hm-num {
+  font-size: 1.35em;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.acp-hm-label {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+.acp-hm {
+  display: flex;
+  gap: 2px;
+  align-items: flex-start;
+}
+.acp-hm-days,
+.acp-hm-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.acp-hm-month,
+.acp-hm-dayname {
+  height: 11px;
+  line-height: 11px;
+  font-size: 9px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.acp-hm-dayname {
+  width: 24px;
+}
+.acp-hm-cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  background: var(--background-modifier-border);
+}
+.acp-hm-cell.lv1 {
+  background: #9be9a8;
+}
+.acp-hm-cell.lv2 {
+  background: #40c463;
+}
+.acp-hm-cell.lv3 {
+  background: #30a14e;
+}
+.acp-hm-cell.lv4 {
+  background: #216e39;
+}
+.acp-hm-cell.is-future {
+  visibility: hidden;
+}
+.acp-hm-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* ================================================================== */
+/* Axion 1.8: player (own classes, custom seek bar) + to-do      */
+/* ================================================================== */
+.tts-player {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 2px;
+}
+.tts-player .if-pl-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.tts-player button.if-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+  border: 1px solid var(--background-modifier-border);
+  box-shadow: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.tts-player button.if-btn:hover {
+  background: var(--background-modifier-border);
+}
+.tts-player button.if-btn.if-btn-main {
+  width: 44px;
+  height: 44px;
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: transparent;
+}
+.tts-player button.if-btn.if-btn-main:hover {
+  background: var(--interactive-accent-hover);
+}
+.tts-player button.if-btn.if-btn-small {
+  width: 28px;
+  height: 28px;
+}
+.tts-player button.if-btn .ico {
+  width: 17px;
+  height: 17px;
+}
+.tts-player button.if-btn-main .ico {
+  width: 20px;
+  height: 20px;
+}
+.tts-player button.if-btn-small .ico {
+  width: 13px;
+  height: 13px;
+}
+
+/* seek bar: time | track | time */
+.tts-player .if-pl-seekrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.tts-player .if-pl-time {
+  flex: 0 0 auto;
+  min-width: 34px;
+  font-size: var(--font-ui-smaller);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  text-align: center;
+}
+.tts-player .if-seek {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 22px;
+  cursor: pointer;
+  touch-action: none;
+  outline: none;
+}
+.tts-player .if-seek::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 3px;
+  background: var(--background-modifier-border);
+}
+.tts-player .if-seek-fill {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 6px;
+  width: 0;
+  margin-top: -3px;
+  border-radius: 3px;
+  background: var(--interactive-accent);
+}
+.tts-player .if-seek-thumb {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border-radius: 50%;
+  background: var(--interactive-accent);
+  border: 2px solid var(--background-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  box-sizing: border-box;
+  transition: transform 0.1s;
+}
+.tts-player .if-seek.is-drag .if-seek-thumb,
+.tts-player .if-seek:focus-visible .if-seek-thumb {
+  transform: scale(1.25);
+}
+
+/* speed stepper: ( - 1.0x + ) */
+.tts-player .if-pl-speed {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--background-secondary-alt, var(--background-modifier-hover));
+  border: 1px solid var(--background-modifier-border);
+}
+.tts-player button.if-pl-speedval {
+  width: 46px;
+  height: 28px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  font-size: var(--font-ui-small);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-normal);
+  cursor: pointer;
+}
+.tts-player .tts-player-status {
+  min-height: 1em;
+  text-align: center;
+  font-size: var(--font-ui-smaller);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tts-player .tts-player-status.is-error {
+  color: var(--text-error);
+}
+
+/* ---- to-do ---- */
+.if-todo-add {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.if-todo-add input.if-todo-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 34px;
+}
+.if-todo-add button.if-todo-addbtn {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  box-shadow: none;
+}
+.if-todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.if-todo-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: var(--background-modifier-hover);
+}
+.if-todo-item .if-todo-check {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  border-radius: 50%;
+  border: 2px solid var(--text-faint);
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-on-accent);
+  box-sizing: border-box;
+}
+.if-todo-item.is-done .if-todo-check {
+  background: var(--interactive-accent);
+  border-color: var(--interactive-accent);
+}
+.if-todo-item.is-done .if-todo-check::after {
+  content: "";
+  width: 4px;
+  height: 8px;
+  margin-top: -2px;
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.if-todo-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  word-break: break-word;
+}
+.if-todo-item.is-done .if-todo-text {
+  text-decoration: line-through;
+  color: var(--text-faint);
+}
+.if-todo-del {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+.if-todo-del:hover {
+  color: var(--text-error);
+}
+.if-todo-del .ico {
+  width: 12px;
+  height: 12px;
+}
+.if-todo-empty,
+.if-todo-count {
+  font-size: var(--font-ui-smaller);
+  color: var(--text-muted);
+}
+.if-todo-empty {
+  text-align: center;
+  padding: 6px;
+}
+.if-todo-clear {
+  cursor: pointer;
+}
+.if-todo-clear:hover {
+  color: var(--text-normal);
+}
+
+/* ---- 2.5: the Calendar section (Jalali month grid + the day's tasks) ---- */
+.if-cal-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 2px 10px;
+}
+.if-cal-nav {
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: var(--text-muted);
+  flex: 0 0 auto;
+}
+.if-cal-nav:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+.if-cal-title {
+  flex: 1 1 auto;
+  text-align: center;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.if-cal-title-greg {
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+}
+.if-cal-today {
+  cursor: pointer;
+  flex: 0 0 auto;
+  font-size: var(--font-ui-smaller);
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--background-modifier-border);
+  color: var(--text-muted);
+}
+.if-cal-today:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+.if-cal-weekdays,
+.if-cal-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+.if-cal-wd {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2px 0 6px;
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+  line-height: 1.3;
+}
+.if-cal-wd-fa {
+  font-size: var(--font-ui-small);
+}
+.if-cal-wd-greg {
+  font-size: 10px;
+  opacity: 0.7;
+}
+.if-cal-cell {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  margin: 1px;
+}
+.if-cal-cell:hover {
+  background: var(--background-modifier-hover);
+}
+.if-cal-cell.is-out {
+  opacity: 0.35;
+}
+.if-cal-cell.is-today {
+  box-shadow: inset 0 0 0 1.5px var(--interactive-accent, #7c5cff);
+}
+.if-cal-cell.is-selected {
+  background: var(--interactive-accent, #7c5cff);
+  color: var(--text-on-accent, #fff);
+}
+.if-cal-jd {
+  font-size: var(--font-ui-medium);
+  line-height: 1.1;
+}
+.if-cal-gd {
+  font-size: 9px;
+  line-height: 1;
+  color: var(--text-muted);
+}
+.if-cal-cell.is-selected .if-cal-gd {
+  color: var(--text-on-accent, #fff);
+  opacity: 0.75;
+}
+.if-cal-dot {
+  position: absolute;
+  bottom: 3px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--interactive-accent, #7c5cff);
+}
+.if-cal-cell.is-selected .if-cal-dot {
+  background: var(--text-on-accent, #fff);
+}
+.if-cal-day {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--background-modifier-border);
+}
+.if-cal-day-head {
+  display: flex;
+  align-items: center;
+  padding-bottom: 6px;
+}
+.if-cal-day-title {
+  font-weight: 600;
+  font-size: var(--font-ui-small);
+}
+.if-cal-day-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.if-cal-add {
+  margin-top: 8px;
+}
+
+/* ---- 1.2: shortcut buttons above the player ---- */
+.ico-sticky {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 4h14v10l-6 6H5z' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M13 20v-6h6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.ico-translate {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 5h9M8.5 3v2M6 5c0 4 3 7 6 8M11 5c0 3-3 6-6 8' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M13 21l4-9 4 9M14.5 18h5' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.ico-read {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 9v6h4l5 4V5L8 9z'/%3E%3Cpath d='M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.ico-card {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 8h16v11H4z' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M7 4.5h10' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.ico-timer {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='13' r='8' fill='none' stroke='black' stroke-width='2'/%3E%3Cpath d='M12 9v4l3 2M9 2.5h6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.ico-sliders {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 7h9M17 7h3M4 17h3M11 17h9' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='15' cy='7' r='2' fill='none' stroke='black' stroke-width='2'/%3E%3Ccircle cx='9' cy='17' r='2' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E");
+}
+
+.if-quick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 8px 4px 10px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  margin-bottom: 4px;
+}
+.if-quick:empty {
+  display: none;
+}
+.if-quick button.if-q {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+  border: 1px solid var(--background-modifier-border);
+  box-shadow: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.if-quick button.if-q:hover {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: transparent;
+}
+.if-quick button.if-q .ico {
+  width: 19px;
+  height: 19px;
+}
+
+/* ---- custom shortcut buttons: a scrollable row under the fixed ones ---- */
+.if-shortcuts {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 4px 8px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  scrollbar-width: thin;
+}
+.if-shortcuts button.if-sc {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+  border: 1px solid var(--background-modifier-border);
+  box-shadow: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.if-shortcuts button.if-sc:hover {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: transparent;
+}
+.if-shortcuts .if-sc-glyph {
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 600;
+}
+.if-shortcuts button.if-sc-add {
+  border-style: dashed;
+  background: transparent;
+  color: var(--text-muted);
+}
+.if-shortcuts .ico {
+  width: 15px;
+  height: 15px;
+}
+.ico-clipboard {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 3h6v4H9zM15 5h2a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M8.5 14l2.5 2.5 4.5-5' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* ---- 1.3.1: fixed top (shortcut buttons), only the sections scroll ---- */
+.acp-panel {
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden !important;
+}
+.acp-panel .if-top {
+  flex: 0 0 auto;
+  background: var(--background-primary);
+  z-index: 1;
+}
+.acp-panel .if-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+.if-quick button.if-q.is-on {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: transparent;
+}
+
+/* ---- bigger "Show answer" button on flashcards ---- */
+.acp-actions button.mod-cta.acp-wide {
+  height: 52px;
+  font-size: 1.1em;
+  font-weight: 600;
+  border-radius: 12px;
+}
+.acp-sec-caret {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+}
+.acp-sec-caret::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border: solid var(--text-muted);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-top: -3px;
+  transition: transform 0.2s ease;
+}
+.acp-sec.is-collapsed .acp-sec-caret::before {
+  transform: rotate(-45deg);
+  margin-top: 0;
+}
+.acp-sec-head:hover {
+  background: var(--background-modifier-hover);
+}
+.acp-sec-head:focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: -2px;
+}
+/* accordion body: animated open / close */
+.acp-sec-collapse {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.25s ease;
+}
+.acp-sec-collapse > .acp-sec-body {
+  min-height: 0;
+  overflow: hidden;
+  transition: visibility 0.25s;
+}
+.acp-sec-inner {
+  padding: 10px 12px 14px;
+}
+.acp-sec.is-collapsed .acp-sec-collapse {
+  grid-template-rows: 0fr;
+}
+.acp-sec.is-collapsed .acp-sec-collapse > .acp-sec-body {
+  visibility: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  .acp-sec-collapse,
+  .acp-sec-caret::before {
+    transition: none;
+  }
+}
+
+/* ---- toolbar: flashcard button (red while the note has :: or a card) ---- */
+.if-bar {
+  flex-wrap: wrap;
+}
+.if-card {
+  --if-ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 8h16v11H4z' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M7 4.5h10' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  cursor: pointer;
+}
+.if-card.is-on {
+  background: #d00000;
+  opacity: 1;
+  cursor: pointer;
+}
+.if-card.is-on::before {
+  background: #fff;
+}
+
+/* ---- to-do: times ---- */
+.if-todo-item {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+}
+.if-todo-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.if-todo-times {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 30px;
+}
+.if-todo-times-add {
+  padding-left: 2px;
+  margin-bottom: 8px;
+}
+.if-todo-tlabel {
+  font-size: var(--font-ui-smaller);
+  color: var(--text-muted);
+}
+.if-todo-times input.if-todo-time {
+  width: 92px;
+  height: 26px;
+  padding: 0 6px;
+  font-size: var(--font-ui-smaller);
+}
+.if-todo-times input.if-todo-time.is-bad {
+  border-color: var(--text-error);
+}
+.if-todo-item.is-now {
+  box-shadow: inset 3px 0 0 var(--interactive-accent);
+}
+
+/* ---- 1.4.0: update-flashcard button, dash line between front and back ---- */
+.if-upd {
+  --if-ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 11a8 8 0 0 0-14.5-4M4 4v4h4M4 13a8 8 0 0 0 14.5 4M20 20v-4h-4' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.callout[data-callout^="lc-"] hr {
+  border: 0;
+  border-top: 2px dashed currentColor;
+  opacity: 0.45;
+  margin: 6px 0;
+}
+
+/* ---- OCR (1.4.5) ---- */
+.ico-ocr {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M8 9h8M8 12h8M8 15h5' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+.if-ocr-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  background: rgba(0, 0, 0, 0.38);
+}
+.if-ocr-layer.has-box {
+  background: transparent;
+}
+.if-ocr-layer.is-busy {
+  cursor: progress;
+}
+/* the sticky-note "select text" tool (no dark overlay): keep the mouse's own normal cursor while dragging,
+   instead of the crosshair the dimmed OCR-translate picker uses */
+.if-ocr-layer.no-dim {
+  cursor: auto;
+}
+.if-ocr-layer.no-dim.is-busy {
+  cursor: progress;
+}
+.if-ocr-box {
+  position: fixed;
+  box-sizing: border-box;
+  border: 2px solid var(--interactive-accent, #7c5cff);
+  border-radius: 3px;
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.42);
+  pointer-events: none;
+}
+.if-ocr-tag {
+  position: absolute;
+  left: -2px;
+  top: 100%;
+  margin-top: 6px;
+  padding: 2px 9px;
+  border-radius: 6px;
+  background: var(--interactive-accent, #7c5cff);
+  color: var(--text-on-accent, #fff);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.if-ocr-tag:empty {
+  display: none;
+}
+.if-ocr-hint {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100% - 90px);
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--background-primary);
+  color: var(--text-normal);
+  box-shadow: var(--shadow-s);
+  font-size: 13px;
+  pointer-events: none;
+}
+.if-ocr-cancel {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* ---- PDF highlights (2.0) ---- */
+.ico-highlight {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 11l6 6M4 20l4-1 11-11a2.1 2.1 0 0 0-3-3L5 16l-1 4z' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M13 20h7' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+.if-ocr-palette {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  max-width: calc(100% - 90px);
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--background-primary);
+  box-shadow: var(--shadow-s);
+}
+.if-ocr-dot {
+  width: 26px;
+  height: 26px;
+  min-width: 0;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.25);
+  box-shadow: none;
+  cursor: pointer;
+}
+.if-ocr-dot.is-on {
+  border-color: var(--text-normal);
+  outline: 2px solid var(--background-primary);
+  box-shadow: 0 0 0 4px var(--interactive-accent);
+}
+.if-ocr-opt {
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.if-ocr-opt.is-on {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+.c-yellow { --hl: 255, 214, 0; background-color: #ffe14d; }
+.c-green { --hl: 70, 200, 70; background-color: #8fdc82; }
+.c-pink { --hl: 255, 90, 140; background-color: #ff9fbd; }
+.c-blue { --hl: 70, 140, 255; background-color: #8fbcff; }
+.c-orange { --hl: 255, 150, 30; background-color: #ffb866; }
+.c-purple { --hl: 150, 100, 255; background-color: #c3a6ff; }
+
+/* layer on every PDF page: everything inside is positioned in percent of the page, so it follows every zoom */
+.if-hl-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  container-type: size;
+  overflow: visible;
+}
+.if-hl {
+  position: absolute;
+  box-sizing: border-box;
+  pointer-events: none;
+  mix-blend-mode: darken;
+  opacity: 0.28;
+}
+.if-hl.s-round {
+  border-radius: 0.35cqh;
+}
+.if-hl.s-flat {
+  border-radius: 0;
+}
+/* the sticky-note pin: a small tilted pushpin on the top right corner of the highlight, in its colour, half see-through;
+   it is sized in page units, so it grows and shrinks with the zoom */
+.if-hl-pin {
+  position: absolute;
+  box-sizing: border-box;
+  pointer-events: auto;
+  cursor: pointer;
+  width: clamp(8px, 1.9cqw, 40px);
+  height: clamp(8px, 1.9cqw, 40px);
+  margin: -0.85em 0 0 -0.35em;
+  font-size: clamp(8px, 1.9cqw, 40px);
+  opacity: 0.82;
+  transform: rotate(38deg);
+  transform-origin: 50% 85%;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 2h8l-1.3 6.6 3.3 3.6v1.8h-5.2V22h-1.6v-8H6v-1.8l3.3-3.6z' fill='black'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 2h8l-1.3 6.6 3.3 3.6v1.8h-5.2V22h-1.6v-8H6v-1.8l3.3-3.6z' fill='black'/%3E%3C/svg%3E") center / contain no-repeat;
+  filter: saturate(1.25) brightness(0.92);
+}
+.if-hl-pin:hover {
+  opacity: 1;
+  transform: rotate(38deg) scale(1.25);
+}
+/* a free note (not tied to any highlighted text) shows a pin + a little note/table glyph instead of a plain pin,
+   so it is clear on sight why a pin sits on blank space with nothing highlighted under it */
+.if-hl-pin.is-free {
+  transform: none;
+  margin: -1.05em 0 0 -0.75em;
+}
+.if-hl-pin.is-free:hover {
+  transform: scale(1.18);
+}
+.if-hl-pin.is-free.is-md {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 6.5H14L18 10.5V21.5H3Z' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M14 6.5V10.5H18' fill='none' stroke='black' stroke-width='1.6'/%3E%3Cpath d='M7.3 12.6h7M7.3 16.2h7M10 11v7M13.3 11v7' fill='none' stroke='black' stroke-width='1.3' stroke-linecap='round'/%3E%3Cg transform='translate(13.5,-3.6) rotate(28 16 7) scale(0.52)'%3E%3Ccircle cx='12' cy='6.2' r='4.3' fill='black'/%3E%3Cpath d='M8.8 9.6L12 22L15.2 9.6Z' fill='black'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 6.5H14L18 10.5V21.5H3Z' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M14 6.5V10.5H18' fill='none' stroke='black' stroke-width='1.6'/%3E%3Cpath d='M7.3 12.6h7M7.3 16.2h7M10 11v7M13.3 11v7' fill='none' stroke='black' stroke-width='1.3' stroke-linecap='round'/%3E%3Cg transform='translate(13.5,-3.6) rotate(28 16 7) scale(0.52)'%3E%3Ccircle cx='12' cy='6.2' r='4.3' fill='black'/%3E%3Cpath d='M8.8 9.6L12 22L15.2 9.6Z' fill='black'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+}
+.if-hl-pin.is-free.is-table {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 6.5H14L18 10.5V21.5H3Z' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M14 6.5V10.5H18' fill='none' stroke='black' stroke-width='1.6'/%3E%3Cpath d='M6.3 13.5h9M6.3 17.3h9' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round'/%3E%3Cg transform='translate(13.5,-3.6) rotate(28 16 7) scale(0.52)'%3E%3Ccircle cx='12' cy='6.2' r='4.3' fill='black'/%3E%3Cpath d='M8.8 9.6L12 22L15.2 9.6Z' fill='black'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 6.5H14L18 10.5V21.5H3Z' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M14 6.5V10.5H18' fill='none' stroke='black' stroke-width='1.6'/%3E%3Cpath d='M6.3 13.5h9M6.3 17.3h9' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round'/%3E%3Cg transform='translate(13.5,-3.6) rotate(28 16 7) scale(0.52)'%3E%3Ccircle cx='12' cy='6.2' r='4.3' fill='black'/%3E%3Cpath d='M8.8 9.6L12 22L15.2 9.6Z' fill='black'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+}
+.if-hl-pin.is-free.is-ocr {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 6.5H14L18 10.5V21.5H3Z' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M14 6.5V10.5H18' fill='none' stroke='black' stroke-width='1.6'/%3E%3Cg transform='translate(13.5,-3.6) rotate(28 16 7) scale(0.52)'%3E%3Ccircle cx='12' cy='6.2' r='4.3' fill='black'/%3E%3Cpath d='M8.8 9.6L12 22L15.2 9.6Z' fill='black'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 6.5H14L18 10.5V21.5H3Z' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M14 6.5V10.5H18' fill='none' stroke='black' stroke-width='1.6'/%3E%3Cg transform='translate(13.5,-3.6) rotate(28 16 7) scale(0.52)'%3E%3Ccircle cx='12' cy='6.2' r='4.3' fill='black'/%3E%3Cpath d='M8.8 9.6L12 22L15.2 9.6Z' fill='black'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* the default name ("Note 1", "Table 2"...) shown next to a free sticky-note pin; double-click to rename */
+.if-hl-pin-name {
+  position: absolute;
+  transform: translate(6px, -4px);
+  font-size: clamp(7px, 1.3cqw, 13px);
+  line-height: 1.3;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--background-primary);
+  color: var(--text-muted);
+  border: 1px solid var(--background-modifier-border);
+  white-space: nowrap;
+  cursor: text;
+  pointer-events: auto;
+  opacity: 0.85;
+  z-index: 2;
+}
+.if-hl-pin-name:hover {
+  opacity: 1;
+  color: var(--text-normal);
+}
+.if-hl-pin-name input {
+  font: inherit;
+  color: inherit;
+  background: var(--background-primary);
+  border: 1px solid var(--interactive-accent);
+  border-radius: 3px;
+  padding: 0 3px;
+  width: 9em;
+}
+.if-hl-pin.is-dragging {
+  opacity: 1;
+  filter: saturate(1.25) brightness(0.92) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+/* floating sticky note on the PDF */
+.if-popup {
+  position: fixed !important;
+  z-index: 9000;
+  width: 340px;
+  max-width: calc(100vw - 16px);
+  max-height: calc(100vh - 16px);
+  overflow: auto;
+  box-sizing: border-box;
+  margin: 0 !important;
+  box-shadow: 3px 6px 18px rgba(0, 0, 0, 0.35) !important;
+}
+.if-popup.is-pinned {
+  outline: 2px solid var(--interactive-accent);
+}
+.if-popup-grab {
+  cursor: move;
+  touch-action: none;
+}
+.if-popup .callout-title {
+  display: none !important;
+}
+.if-popup .if-bar {
+  justify-content: space-between;
+}
+.if-popup textarea.if-popup-note,
+.if-popup select,
+.if-popup input {
+  font-family: inherit;
+}
+.if-popup textarea.if-popup-note {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 60px;
+  margin-top: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.6);
+  color: #000;
+  font-size: 13px;
+  line-height: 1.4;
+  resize: vertical;
+  unicode-bidi: plaintext;
+}
+.if-popup .if-popup-page {
+  font-size: 11px;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+/* the small "Your note" heading above a sticky note's second box (table / OCR notes - their main content
+   already fills the first box, so this one makes clear the second box below it is a separate, personal note) */
+.if-popup .if-popup-note-label {
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.65;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.2);
+}
+.if-pin {
+  --if-ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 17v5M9 3h6l-1 6 3 3v2H7v-2l3-3-1-6z' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.if-pin.is-on {
+  background: var(--interactive-accent);
+}
+.if-pin.is-on::before {
+  background: #fff;
+}
+.if-hl.is-flash {
+  animation: if-hl-flash 0.55s ease-in-out 4;
+}
+@keyframes if-hl-flash {
+  50% {
+    opacity: 1;
+    filter: saturate(2.2) brightness(0.85);
+    outline: 2px solid rgba(var(--hl, 255, 214, 0), 1);
+  }
+}
+
+/* ---- 2.0.1: floating toolbar on PDFs, highlight menu, armed marker ---- */
+.ico-hlnote {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h7l4 4v3' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M8.5 9h4M8.5 13h2' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M13.5 21l.8-3 5.2-5.2a1.7 1.7 0 0 1 2.4 2.4L16.7 20.4z' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+/* 2.5.7: highlight + sticky note, source text only (no translation) - same page shape as .ico-hlnote, but with
+   plain text lines instead of the pencil+translate glyph, since nothing is translated for this mode */
+.ico-hlnotesrc {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h7l4 4v3' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M8.5 9h7M8.5 13h7M8.5 17h4' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.ico-tipround {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='8' fill='black'/%3E%3C/svg%3E");
+}
+.ico-tipflat {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='4.5' y='4.5' width='15' height='15' fill='black'/%3E%3C/svg%3E");
+}
+.ico-grip {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='black'%3E%3Ccircle cx='9' cy='6' r='1.7'/%3E%3Ccircle cx='15' cy='6' r='1.7'/%3E%3Ccircle cx='9' cy='12' r='1.7'/%3E%3Ccircle cx='15' cy='12' r='1.7'/%3E%3Ccircle cx='9' cy='18' r='1.7'/%3E%3Ccircle cx='15' cy='18' r='1.7'/%3E%3C/g%3E%3C/svg%3E");
+}
+.ico-chev {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14.5 6l-6 6 6 6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.ico-toolbox {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='4' y='4' width='6.5' height='6.5' rx='1.6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='13.5' y='4' width='6.5' height='6.5' rx='1.6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='4' y='13.5' width='6.5' height='6.5' rx='1.6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='13.5' y='13.5' width='6.5' height='6.5' rx='1.6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.if-dock .ico {
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background: currentColor;
+  -webkit-mask: var(--ico) center / contain no-repeat;
+  mask: var(--ico) center / contain no-repeat;
+}
+.if-dock {
+  position: fixed;
+  z-index: 8500;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  max-width: calc(100vw - 12px);
+  user-select: none;
+  -webkit-user-select: none;
+}
+.if-dock-bar,
+.if-dock-menu {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+}
+.if-dock-bar {
+  border-radius: 999px;
+  padding-left: 2px;
+}
+.if-dock-menu {
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 26px;
+}
+.if-dock-vsep {
+  width: 1px;
+  align-self: stretch;
+  margin: 3px 1px;
+  background: var(--background-modifier-border);
+  flex: 0 0 auto;
+}
+.if-dock-grip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 40px;
+  color: var(--text-faint);
+  cursor: grab;
+  touch-action: none;
+}
+.if-dock-grip:active {
+  cursor: grabbing;
+}
+.if-dock-grip .ico {
+  width: 16px;
+  height: 16px;
+}
+.if-dock button.if-d {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+  border: 1px solid var(--background-modifier-border);
+  box-shadow: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.if-dock button.if-d:hover {
+  background: var(--background-modifier-border);
+}
+.if-dock button.if-d.is-on {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: transparent;
+}
+.if-dock button.if-d-fold {
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-muted);
+}
+.if-dm-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.if-dm-sep {
+  width: 1px;
+  align-self: stretch;
+  margin: 4px 2px;
+  background: var(--background-modifier-border);
+}
+.if-dm-pal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.if-dock .if-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.if-dock .if-dot.is-on {
+  border-color: var(--text-normal);
+  box-shadow: 0 0 0 2px var(--background-primary), 0 0 0 4px var(--interactive-accent);
+}
+@media (pointer: coarse) {
+  .if-dock button.if-d {
+    width: 46px;
+    height: 46px;
+  }
+  .if-dock-grip {
+    height: 46px;
+    width: 26px;
+  }
+  .if-dock .if-dot {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+/* the marker is armed: no dimming, no custom cursor - the mouse's own pointer stays, same as plain text
+   selection (text just does not get selected while a drag highlights it instead) */
+body.if-armed .pdf-viewer,
+body.if-armed .pdf-viewer .page,
+body.if-armed .pdf-viewer .textLayer,
+body.if-armed .pdf-viewer .textLayer span,
+body.if-armed .pdf-viewer .textLayer br {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+body.if-armed .pdf-viewer .page {
+  touch-action: pan-x pan-y pinch-zoom;
+}
+.if-arm-frame {
+  position: fixed;
+  z-index: 8400;
+  box-sizing: border-box;
+  pointer-events: none;
+  border: 2px dashed rgba(var(--hl, 255, 214, 0), 1);
+  border-radius: 4px;
+  background-color: rgba(var(--hl, 255, 214, 0), 0.22) !important;
+}
+.if-arm-frame.is-busy {
+  animation: if-hl-flash 0.9s ease-in-out infinite;
+}
+
+/* the frame round a highlight you jumped to from its link */
+.if-hl-frame {
+  position: absolute;
+  box-sizing: border-box;
+  pointer-events: none;
+  background-color: transparent !important;
+  border: 2px dashed rgba(var(--hl, 255, 150, 0), 1);
+  border-radius: 6px;
+  animation: if-frame-pulse 0.9s ease-in-out 3;
+}
+@keyframes if-frame-pulse {
+  50% {
+    box-shadow: 0 0 0 4px rgba(var(--hl, 255, 150, 0), 0.45);
+  }
+}
+
+/* ---- 2.0.6: screenshots, screen recording, resizable sticky notes ---- */
+.ico-record {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='12' cy='12' r='4.6' fill='black'/%3E%3C/svg%3E");
+}
+.ico-camera {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 8h3l1.6-2.5h6.8L17 8h3v11H4z' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='12' cy='13.2' r='3.4' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.ico-attach {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 7a1 1 0 0 1 1-1h5l2 2.5h8a1 1 0 0 1 1 1V18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M12 11v5M9.5 13.5h5' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.if-dock .ico,
+.if-cap .ico {
+  display: inline-block;
+}
+.if-cap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.if-cap button.if-cb {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+  border: 1px solid var(--background-modifier-border);
+  box-shadow: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.if-cap button.if-cb .ico {
+  width: 18px;
+  height: 18px;
+}
+.if-cap button.if-cb:hover {
+  background: var(--background-modifier-border);
+}
+.if-cap button.if-cb:active {
+  transform: scale(0.92);
+}
+.if-cap button.if-cb.is-idle-rec {
+  color: #e5342f;
+}
+.if-cap button.if-cb.is-rec {
+  background: #e5342f;
+  border-color: transparent;
+  color: #fff;
+}
+.if-cap button.if-cb.is-off {
+  color: var(--text-faint);
+  position: relative;
+}
+.if-cap button.if-cb.is-off::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 2px;
+  background: currentColor;
+  transform: rotate(-45deg);
+}
+.if-cap button.if-cb.is-na {
+  opacity: 0.35;
+}
+.if-cap-time {
+  min-width: 54px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+.if-cap-time.is-on {
+  color: var(--text-normal);
+}
+.if-cap-time.is-on::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: #e5342f;
+  animation: if-blink 1.1s ease-in-out infinite;
+}
+.if-cap-time.is-paused::before {
+  animation: none;
+  background: #e5a02f;
+}
+@keyframes if-blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+.if-cap-note {
+  flex: 1 1 140px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.if-dock-cap {
+  flex-direction: row;
+  padding: 8px 12px;
+}
+.if-dock button.if-d.is-rec {
+  background: #e5342f;
+  color: #fff;
+  border-color: transparent;
+}
+.if-dock button.if-d:active {
+  transform: scale(0.92);
+}
+.if-dock button.if-d.is-flash {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+.if-src-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 12px;
+}
+.if-src {
+  border: 2px solid var(--background-modifier-border);
+  border-radius: 10px;
+  padding: 6px;
+  cursor: pointer;
+  background: var(--background-secondary);
+}
+.if-src:hover,
+.if-src:focus-visible {
+  border-color: var(--interactive-accent);
+}
+.if-src.is-last {
+  border-color: var(--text-faint);
+}
+.if-src img {
+  width: 100%;
+  height: 96px;
+  object-fit: contain;
+  display: block;
+  background: #000;
+  border-radius: 6px;
+}
+.if-src-name {
+  margin-top: 6px;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* sticky note popup: resize from any edge or corner, like a window */
+.if-popup {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden !important;
+}
+.if-popup > .callout-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+.if-rs {
+  position: absolute;
+  z-index: 2;
+  touch-action: none;
+}
+.if-rs-n,
+.if-rs-s {
+  left: 10px;
+  right: 10px;
+  height: 8px;
+  cursor: ns-resize;
+}
+.if-rs-n {
+  top: 0;
+}
+.if-rs-s {
+  bottom: 0;
+}
+.if-rs-e,
+.if-rs-w {
+  top: 10px;
+  bottom: 10px;
+  width: 8px;
+  cursor: ew-resize;
+}
+.if-rs-e {
+  right: 0;
+}
+.if-rs-w {
+  left: 0;
+}
+.if-rs-ne,
+.if-rs-nw,
+.if-rs-se,
+.if-rs-sw {
+  width: 16px;
+  height: 16px;
+}
+.if-rs-ne {
+  top: 0;
+  right: 0;
+  cursor: nesw-resize;
+}
+.if-rs-nw {
+  top: 0;
+  left: 0;
+  cursor: nwse-resize;
+}
+.if-rs-se {
+  bottom: 0;
+  right: 0;
+  cursor: nwse-resize;
+}
+.if-rs-sw {
+  bottom: 0;
+  left: 0;
+  cursor: nesw-resize;
+}
+@media (pointer: coarse) {
+  .if-rs-n, .if-rs-s { height: 18px; }
+  .if-rs-e, .if-rs-w { width: 18px; }
+  .if-rs-ne, .if-rs-nw, .if-rs-se, .if-rs-sw { width: 28px; height: 28px; }
+  .if-cap button.if-cb { width: 42px; height: 42px; }
+}
+
+/* a selected plain highlight: outline + a delete button at its top right */
+.if-hl.is-selected {
+  outline: 2px solid rgba(var(--hl, 255, 150, 0), 1);
+  outline-offset: 1px;
+  opacity: 0.55;
+}
+.if-hl-del {
+  position: absolute;
+  z-index: 4;
+  width: 26px;
+  height: 26px;
+  margin: -30px 0 0 -13px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e5342f;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  pointer-events: auto;
+}
+.if-hl-del .ico {
+  width: 15px;
+  height: 15px;
+}
+.if-hl-del:hover {
+  background: #c9211d;
+}
+
+/* selection layer without dimming (screenshots, by default) */
+.if-ocr-layer.no-dim {
+  background: transparent;
+}
+.if-ocr-layer.no-dim .if-ocr-box {
+  box-shadow: none;
+  background: rgba(124, 92, 255, 0.12);
+  border-style: dashed;
+}
+.if-ocr-layer.no-dim.is-busy {
+  background: transparent;
+}
+
+/* capture buttons: the size of the player buttons */
+.if-cap {
+  justify-content: center;
+  gap: 10px;
+}
+.if-cap button.if-cb {
+  width: 38px;
+  height: 38px;
+}
+.if-cap button.if-cb .ico {
+  width: 19px;
+  height: 19px;
+}
+
+/* the status bar of Obsidian (bottom right) must not cover the last thing in the panel */
+.acp-panel .if-scroll {
+  padding-bottom: 44px;
+}
+
+/* ---- To Do: rounder, softer ---- */
+.if-todo-gear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-left: 6px;
+  border-radius: 50%;
+  color: var(--text-muted);
+  cursor: pointer;
+  vertical-align: middle;
+}
+.if-todo-gear .ico {
+  width: 15px;
+  height: 15px;
+}
+.if-todo-gear:hover,
+.if-todo-gear.is-on {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+.if-todo-opts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  border-radius: 18px;
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+}
+.if-todo-opts.is-hidden {
+  display: none;
+}
+.if-todo-optrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: var(--font-ui-small);
+}
+.if-todo-optctl {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.if-todo-optctl select.dropdown {
+  border-radius: 999px;
+  height: 28px;
+  padding: 0 24px 0 10px;
+}
+button.if-todo-tbtn {
+  width: 28px;
+  height: 28px;
+  min-width: 0;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 11px;
+  line-height: 1;
+}
+.if-todo-add input.if-todo-input {
+  border-radius: 999px;
+  height: 36px;
+  padding: 0 14px;
+}
+.if-todo-add button.if-todo-addbtn {
+  width: 36px;
+  height: 36px;
+}
+.if-todo-item {
+  border-radius: 16px;
+  padding: 8px 12px;
+  gap: 6px;
+}
+.if-todo-item.is-now {
+  box-shadow: inset 4px 0 0 var(--interactive-accent);
+}
+.if-todo-times input.if-todo-time {
+  border-radius: 999px;
+  height: 28px;
+  width: 98px;
+  padding: 0 10px;
+  background: var(--background-primary);
+}
+.if-todo-times input.if-todo-time::-webkit-calendar-picker-indicator {
+  margin-left: 2px;
+}
+
+/* ======== 2.1.0 ======== */
+/* icons: Select text (OCR), Insert text, Open note */
+.ico-seltext {
+  /* folded-corner paper + round-headed pin, blank inside: a sticky note made by free-selecting text (incl. OCR) */
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 6.5H14L18 10.5V21.5H3Z' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M14 6.5V10.5H18' fill='none' stroke='black' stroke-width='1.6'/%3E%3Cg transform='translate(13.5,-3.6) rotate(28 16 7) scale(0.52)'%3E%3Ccircle cx='12' cy='6.2' r='4.3' fill='black'/%3E%3Cpath d='M8.8 9.6L12 22L15.2 9.6Z' fill='black'/%3E%3C/g%3E%3C/svg%3E");
+}
+.ico-text {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 7.5V5h14v2.5M12 5v14M9 19h6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.ico-opennote {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='3' y='4' width='18' height='16' rx='2.5' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M12 4v16M15.5 9h2M15.5 13h2' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+/* toolbar of a box in the note, or of a sticky note popup on the PDF: folded behind a small "⋯" button
+   in the top-right corner (click it to open/close); same markup and behaviour in both places. */
+.if-bar-fold .if-bar:not(.is-open) {
+  justify-content: flex-end;
+  min-height: 16px;
+}
+.if-bar-fold .if-bar:not(.is-open) > .if-swatches,
+.if-bar-fold .if-bar:not(.is-open) > .if-actions {
+  display: none !important;
+}
+.if-fold {
+  margin-left: auto;
+  opacity: 0.6;
+  --if-ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='6' cy='12' r='2'/%3E%3Ccircle cx='12' cy='12' r='2'/%3E%3Ccircle cx='18' cy='12' r='2'/%3E%3C/svg%3E");
+}
+.if-fold:hover {
+  opacity: 1;
+}
+.if-code-chip {
+  display: inline-block;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--text-muted);
+  line-height: 1.2;
+  cursor: default;
+}
+
+/* text boxes on the PDF page */
+.if-tx-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  container-type: size;
+  overflow: visible;
+}
+.if-tx {
+  position: absolute;
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+.if-tx-body {
+  box-sizing: border-box;
+  min-height: 1.3em;
+  padding: 0.12em 0.3em;
+  border-radius: 0.25em;
+  line-height: 1.3;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  outline: none;
+  cursor: text;
+  user-select: text;
+  -webkit-user-select: text;
+  font-family: var(--font-text, sans-serif);
+}
+.if-tx.is-selected .if-tx-body,
+.if-tx:hover .if-tx-body {
+  outline: 1.5px dashed var(--interactive-accent, #7c5cff);
+  outline-offset: 1px;
+}
+.if-tx-grab,
+.if-tx-rs,
+.if-tx-del {
+  display: none;
+  position: absolute;
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  touch-action: none;
+}
+.if-tx.is-selected .if-tx-grab,
+.if-tx.is-selected .if-tx-rs,
+.if-tx.is-selected .if-tx-del {
+  display: flex;
+}
+.if-tx-grab {
+  left: -13px;
+  top: -13px;
+  width: 24px;
+  height: 24px;
+  background: var(--background-primary, #fff);
+  color: var(--text-muted, #666);
+  cursor: move;
+}
+.if-tx-grab .ico {
+  width: 14px;
+  height: 14px;
+  background: currentColor;
+  -webkit-mask: var(--ico) center / contain no-repeat;
+  mask: var(--ico) center / contain no-repeat;
+  transform: rotate(90deg);
+}
+.if-tx-rs {
+  right: -11px;
+  bottom: -11px;
+  width: 20px;
+  height: 20px;
+  background: var(--interactive-accent, #7c5cff);
+  cursor: ew-resize;
+}
+.if-tx-del {
+  right: -13px;
+  top: -13px;
+  width: 24px;
+  height: 24px;
+  background: #e5342f;
+  color: #fff;
+  cursor: pointer;
+}
+.if-tx-del .ico {
+  width: 14px;
+  height: 14px;
+  background: currentColor;
+  -webkit-mask: var(--ico) center / contain no-repeat;
+  mask: var(--ico) center / contain no-repeat;
+}
+body.if-texting .pdf-viewer,
+body.if-texting .pdf-viewer .page,
+body.if-texting .pdf-viewer .textLayer,
+body.if-texting .pdf-viewer .textLayer span {
+  cursor: text !important;
+}
+.if-tx-frame {
+  height: 26px;
+  border-style: dashed;
+}
+
+/* the text menu under the floating toolbar */
+.if-dock-text .if-dm-row {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.if-dock button.if-d.if-d-txt {
+  width: 36px;
+  height: 36px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+.if-dock button.if-d.is-b {
+  font-weight: 900;
+}
+.if-dock button.if-d.is-i {
+  font-style: italic;
+  font-family: serif;
+}
+.if-dm-font {
+  font-family: inherit;
+  height: 36px;
+  max-width: 150px;
+  border-radius: 999px;
+  padding: 0 12px;
+  background: var(--background-modifier-hover);
+  border: 1px solid var(--background-modifier-border);
+  color: var(--text-normal);
+  font-size: 13px;
+}
+.if-dm-size {
+  min-width: 28px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-normal);
+}
+.if-dock .if-dot.if-dot-bg {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+}
+.if-dock .if-dot.if-dot-bg.is-none {
+  background: linear-gradient(135deg, transparent 46%, #d22f27 46% 54%, transparent 54%), var(--background-primary);
+}
+
+/* ======== 2.2.0: sticky-note menu, free sticky notes (Markdown), table picker ======== */
+/* all three icons here (and .ico-seltext above) are the same pair - a folded-corner paper + a round-headed pin -
+   with only the inner mark changing, matching the 3 reference icons: "#" = empty note, two lines = table note,
+   blank = free-select/OCR note. The on-page pin markers (.if-hl-pin.is-free.is-*) use the exact same glyphs. */
+.ico-stickymd {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 6.5H14L18 10.5V21.5H3Z' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M14 6.5V10.5H18' fill='none' stroke='black' stroke-width='1.6'/%3E%3Cpath d='M7.3 12.6h7M7.3 16.2h7M10 11v7M13.3 11v7' fill='none' stroke='black' stroke-width='1.3' stroke-linecap='round'/%3E%3Cg transform='translate(13.5,-3.6) rotate(28 16 7) scale(0.52)'%3E%3Ccircle cx='12' cy='6.2' r='4.3' fill='black'/%3E%3Cpath d='M8.8 9.6L12 22L15.2 9.6Z' fill='black'/%3E%3C/g%3E%3C/svg%3E");
+}
+.ico-stickytable {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 6.5H14L18 10.5V21.5H3Z' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M14 6.5V10.5H18' fill='none' stroke='black' stroke-width='1.6'/%3E%3Cpath d='M6.3 13.5h9M6.3 17.3h9' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round'/%3E%3Cg transform='translate(13.5,-3.6) rotate(28 16 7) scale(0.52)'%3E%3Ccircle cx='12' cy='6.2' r='4.3' fill='black'/%3E%3Cpath d='M8.8 9.6L12 22L15.2 9.6Z' fill='black'/%3E%3C/g%3E%3C/svg%3E");
+}
+.ico-pointer {
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 3l3.6 16.2 2.2-6.6 6.6-2.2z' fill='black' stroke='black' stroke-width='1.3' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.ico-editbar {
+  /* a plain "MD" badge - this toolbar only ever writes Markdown, never HTML */
+  --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='2.5' y='5' width='19' height='14' rx='2.5' fill='none' stroke='black' stroke-width='2'/%3E%3Ctext x='12' y='15.3' font-family='Arial,sans-serif' font-size='9.5' font-weight='700' text-anchor='middle' fill='black'%3EMD%3C/text%3E%3C/svg%3E");
+}
+body.if-placing .pdf-viewer,
+body.if-placing .pdf-viewer .page,
+body.if-placing .pdf-viewer .textLayer,
+body.if-placing .pdf-viewer .textLayer span {
+  cursor: copy !important;
+}
+.if-dm-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  max-width: 260px;
+}
+.if-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.if-grid-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-normal);
+}
+.if-grid-cells {
+  display: grid;
+  gap: 3px;
+}
+.if-grid-cell {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.if-grid-cell.is-on {
+  background: var(--interactive-accent);
+  border-color: transparent;
+}
+.if-grid-more {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.if-grid-more input {
+  width: 54px;
+  height: 30px;
+  border-radius: 999px;
+  text-align: center;
+  padding: 0 4px;
+}
+.if-popup-md {
+  padding: 4px 2px;
+  cursor: text;
+  min-height: 40px;
+  overflow-wrap: anywhere;
+}
+.if-popup-md table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 6px 0;
+  font-size: 0.92em;
+}
+.if-popup-md th,
+.if-popup-md td {
+  border: 1.5px solid #000 !important;
+  background: transparent !important; /* every cell the same: no tinted header row (Obsidian themes can style table th, hence !important) */
+  padding: 5px 7px;
+  min-width: 28px;
+  height: 28px;
+  overflow-wrap: anywhere;
+  vertical-align: top;
+  text-align: start;
+}
+.if-popup-md th {
+  font-weight: 700; /* only the header row is bold; border and background are identical to every other cell */
+}
+.if-popup-md tr:empty,
+.if-popup-md td:empty::before {
+  content: "\00a0"; /* an empty cell keeps the row's height */
+}
+.if-popup-md > :first-child {
+  margin-top: 0;
+}
+.if-popup-md > :last-child {
+  margin-bottom: 0;
+}
+.if-popup textarea.if-popup-mdta {
+  font-family: inherit;
+  font-size: 13px;
+  min-height: 110px;
+  margin-top: 4px;
+  resize: vertical;
+}
+.if-popup-mdwrap {
+  position: relative;
+}
+/* the "Preview" toolbar tool (one button per popup, next to the pin - see .if-pin above) */
+.if-preview {
+  --if-ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='12' cy='12' r='3' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E");
+}
+.if-preview.is-on {
+  background: var(--interactive-accent);
+}
+.if-preview.is-on::before {
+  background: #fff;
+}
+
+/* ======== 2.4.0: pointer button, editor toolbar (bold, list, quote ...) ======== */
+.if-dock button.if-d.is-s {
+  text-decoration: line-through;
+}
+.if-dock button.if-d.is-hl {
+  background: #ffe14d;
+  border-color: transparent;
+}
+.if-dock-edit .if-dm-row {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ======== 2.5.9: the text of a highlight sticky note is ONE Markdown box; one eye button switches rendered <-> source ======== */
+.if-popup .if-popup-md .if-popup-line {
+  margin: 0 0 6px;
+}
+.if-popup .if-popup-linetext {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.if-popup .if-popup-linetext p {
+  margin: 0;
+  color: inherit;
+}
+.if-popup .if-popup-sep {
+  margin: 6px 0;
+  border-top: 1px dashed rgba(0, 0, 0, 0.4);
+  font-size: 10px;
+  line-height: 1;
+  opacity: 0.6;
+}
+.if-popup textarea.if-popup-mdta {
+  overflow: hidden;
+}
+/* the eye in a note of the editor: lit while the note is shown as source; nothing to switch in reading view */
+.cm-line.if-src-line .if-preview {
+  background: var(--interactive-accent);
+}
+.cm-line.if-src-line .if-preview::before {
+  background: #fff;
+}
+.markdown-preview-view .if-bar .if-preview {
+  display: none;
+}
+.if-src-line .cm-formatting {
+  display: inline !important;
+}
+.if-play-chip {
+  margin-right: 0.4em;
+  opacity: 0.7;
+}
+/* source mode in the editor: the translation lines keep their colour (same as in the PDF popup) */
+.cm-line.if-src-1,
+.cm-line.if-src-1 span {
+  color: #d00000 !important;
+}
+.cm-line.if-src-2,
+.cm-line.if-src-2 span {
+  color: #0a3fd6 !important;
+}
+
+/* ======== settings page in Persian (Settings > Axion > Language) ======== */
+.ax-rtl {
+  direction: rtl;
+  text-align: right;
+  font-family: Vazirmatn, Vazir, Mikhak, Tahoma, var(--font-interface, sans-serif);
+}
+.ax-rtl .setting-item {
+  direction: rtl;
+}
+.ax-rtl .setting-item-info {
+  margin-right: 0;
+  margin-left: 12px;
+}
+.ax-rtl .setting-item-name,
+.ax-rtl .setting-item-description {
+  text-align: right;
+}
+.ax-rtl input[type="text"],
+.ax-rtl input[type="number"],
+.ax-rtl input[type="search"],
+.ax-rtl textarea {
+  direction: ltr;
+  text-align: left;
+}
+.ax-rtl [data-ax-skip] select {
+  direction: ltr;
+}
+/* the example boxes show real note content (German / English lines): they keep their own direction */
+.ax-rtl [class*="lc-pbox"],
+.ax-rtl [class*="fc-mini"] {
+  direction: ltr;
+  text-align: left;
+}
+
+/* ======== fonts of sticky notes, popups and card review (Settings > Axion > Fonts of sticky notes and cards) ======== */
+body.ax-font .ln,
+body.ax-font .ln.rtl,
+body.ax-font .callout[data-callout^="lc-"] .callout-content,
+body.ax-font .if-popup textarea,
+body.ax-font .if-popup-md > p,
+body.ax-font .acp-card {
+  font-family: var(--ax-font);
+}
+body.ax-size .callout[data-callout^="lc-"] .callout-content,
+body.ax-size .ax-font-sample {
+  font-size: calc(1em * var(--ax-size));
+}
+body.ax-size .acp-card {
+  font-size: calc(1.05em * var(--ax-size));
+}
+body.ax-size .if-popup textarea {
+  font-size: calc(13px * var(--ax-size));
+}
+body.ax-lh .ln,
+body.ax-lh .ln.rtl,
+body.ax-lh .if-popup-md > p,
+body.ax-lh .if-popup textarea {
+  line-height: var(--ax-lh);
+}
+.ax-font-sample {
+  margin: 6px 0 14px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #fff3a6;
+  color: #000;
+}
+.ax-font-sample .ln {
+  margin: 4px 0;
+  unicode-bidi: plaintext;
+}
+.ax-rtl .ax-font-sample {
+  direction: ltr;
+  text-align: left;
+}
+.ax-font-warn {
+  margin-top: 3px;
+  color: var(--text-error, #d00000);
+  font-size: var(--font-ui-smaller);
+}
+.ax-font-warn:empty {
+  display: none;
+}

@@ -1,0 +1,10 @@
+{
+  "id": "axion",
+  "name": "Axion",
+  "version": "2.5.1",
+  "minAppVersion": "1.4.0",
+  "description": "This plugin is designed for studying and researching PDF files and for language learning. Study from PDFs: copies and OCR from your PDF land in a study folder as colour-coded sticky notes with translations (Persian, English, German, French), offline read-aloud, voice notes, flashcards with Anki export, and a Pomodoro timer.",
+  "author": "Mojtaba Shoghi Samani",
+  "authorUrl": "https://github.com/mojtabashoghi",
+  "isDesktopOnly": false
+}
