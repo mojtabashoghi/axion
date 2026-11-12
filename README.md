@@ -1,6 +1,6 @@
 # Axion
 
-> **An all-in-one plugin designed for studying and researching PDF files, and for language learning.**
+> **Axion is an offline-first Obsidian plugin that turns PDFs and Markdown into a unified environment for reading, research, and language learning**
 >
 > **🌐 Language:** [English](README.md) · [فارسی](README_fa.md) · **📖 User Guide:** [English](USER_GUIDE.md) · [فارسی](USER_GUIDE_fa.md)
 
@@ -10,11 +10,11 @@
 [![Made with ONNX Runtime](https://img.shields.io/badge/ONNX%20Runtime-Web-005CED)](https://onnxruntime.ai)
 [![Offline-first](https://img.shields.io/badge/offline--first-success)](https://github.com/mojtabashoghi/axion#-privacy)
 
-> **Study, research, and learn languages without leaving your vault.**
-> Axion turns Obsidian + PDF into a complete workspace. Highlight, translate, listen, and memorise.
-
-Axion turns Obsidian + PDF into a complete language-learning workspace.  
-Every capability is **offline-first**: models are downloaded once, then everything runs on your device.
+Axion is an offline-first Obsidian plugin that turns PDFs and Markdown into a unified environment for reading, research, and language learning.
+Highlight PDF pages, add sticky notes and text boxes, and use OCR to make scanned documents searchable. Translate text into multiple languages
+with local or online models, and listen with neural TTS; audio is saved per sentence so you can build a personal audio archive of key sentences. 
+Create SRS flashcards with audio from the same content, track your review habit with a heatmap, and export cards to Anki. 
+The offline-first design helps protect source privacy and keeps PDFs, Markdown, translation, listening, and review together in one vault—no constant switching between apps.
 
 ---
 
