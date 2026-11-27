@@ -16,6 +16,16 @@ with local or online models, and listen with neural TTS; audio is saved per sent
 Create SRS flashcards with audio from the same content, track your review habit with a heatmap, and export cards to Anki. 
 The offline-first design helps protect source privacy and keeps PDFs, Markdown, translation, listening, and review together in one vault—no constant switching between apps.
 
+
+
+## 2.6.1
+
+### ✨ What's New
+
+- **Add images to PDF files** — Insert images directly into a PDF file.
+- **Add images to sticky note popups** — Attach images to a sticky note from its popup.
+- **Add images to sticky note popups with OCR** — Read text from the image and add it to the Markdown note in the sticky note popup.
+
 ---
 
 ## ✨ Features
