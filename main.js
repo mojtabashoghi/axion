@@ -4475,6 +4475,10 @@ var ICON_MAP = {
   "sticky.svg": { prop: "--ico", sel: ".ico-sticky" },
   "stickymd.svg": { prop: "--ico", sel: ".ico-stickymd" },
   "stickytable.svg": { prop: "--ico", sel: ".ico-stickytable" },
+  "image.svg": { prop: "--ico", sel: ".ico-image" },
+  "imgraw.svg": { prop: "--ico", sel: ".ico-imgraw" },
+  "imgnote.svg": { prop: "--ico", sel: ".ico-imgnote" },
+  "imgocr.svg": { prop: "--ico", sel: ".ico-imgocr" },
   "stop.svg": { prop: "--ico", sel: ".ico-stop" },
   "text.svg": { prop: "--ico", sel: ".ico-text" },
   "timer.svg": { prop: "--ico", sel: ".ico-timer" },
@@ -4495,7 +4499,9 @@ var ICON_MAP = {
   "pin-default.svg": { prop: "mask", sel: ".if-hl-pin" },
   "pin-free-md.svg": { prop: "mask", sel: ".if-hl-pin.is-free.is-md" },
   "pin-free-table.svg": { prop: "mask", sel: ".if-hl-pin.is-free.is-table" },
-  "pin-free-ocr.svg": { prop: "mask", sel: ".if-hl-pin.is-free.is-ocr" }
+  "pin-free-ocr.svg": { prop: "mask", sel: ".if-hl-pin.is-free.is-ocr" },
+  "pin-free-img.svg": { prop: "mask", sel: ".if-hl-pin.is-free.is-img" },
+  "pin-free-imgocr.svg": { prop: "mask", sel: ".if-hl-pin.is-free.is-imgocr" }
 };
 async function loadLogoOverride(plugin, fallbackSvg) {
   try {
@@ -6920,9 +6926,9 @@ function calendarSection(plugin) {
 
 // src/panel/quick.js
 var import_obsidian8 = require("obsidian");
-var QUICK_ORDER = ["sticky", "flashcard", "highlight", "inserttext", "translate", "read", "ocr", "capture", "opennote", "autopaste", "settings"];
+var QUICK_ORDER = ["sticky", "flashcard", "highlight", "inserttext", "insertimage", "translate", "read", "ocr", "capture", "opennote", "autopaste", "settings"];
 var DEFAULT_QUICK = [...QUICK_ORDER];
-var MAX_QUICK = 11;
+var MAX_QUICK = 12;
 function allQuick(plugin) {
   const list = plugin.modules ? plugin.modules.quickActions() : [];
   const rank = (id) => QUICK_ORDER.includes(id) ? QUICK_ORDER.indexOf(id) : 99;
@@ -9201,11 +9207,12 @@ var MARK_ANY = /%%fc:([a-z0-9]+)%%/;
 function plainText(line) {
   return String(line).replace(/^\s*(>\s*)+/, "").replace(/<[^>]*>/g, "").replace(/%%fc:[a-z0-9]+%%/g, "").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").trim();
 }
+var PIC_LINE = /^\s*>\s*!\[\[[^\]\n]+\]\]\s*$/;
 function stickyItems(lines, range) {
   const items = [];
   for (let i2 = range.start + 1; i2 <= range.end; i2++) {
     const l = lines[i2];
-    if (!l || !/^\s*>/.test(l) || l.includes('class="if-bar"') || /\bln-(pg|nt)\b/.test(l)) continue;
+    if (!l || !/^\s*>/.test(l) || l.includes('class="if-bar"') || /\bln-(pg|nt)\b/.test(l) || PIC_LINE.test(l)) continue;
     const text = plainText(l);
     if (!text) continue;
     if (SEP_RE.test(text)) {
@@ -10866,7 +10873,7 @@ function readParts(lines, range) {
   const parts = { text: [], tr: [], link: null, note: [] };
   for (let i2 = range.start + 1; i2 <= range.end; i2++) {
     const l = lines[i2];
-    if (!l || !/^\s*>/.test(l) || l.includes('class="if-bar"')) continue;
+    if (!l || !/^\s*>/.test(l) || l.includes('class="if-bar"') || PIC_LINE.test(l)) continue;
     const t = plainText(l);
     if (!t || /^-{3,}$/.test(t)) continue;
     if (/\bln-pg\b/.test(l)) parts.link = { line: i2, text: t.replace(/%%hl:[a-z0-9]+%%/g, "").trim() };
@@ -10913,7 +10920,7 @@ function readBoxEdit(lines, range) {
   const out = [];
   for (let i2 = range.start + 1; i2 <= range.end; i2++) {
     const l = lines[i2];
-    if (!l || !/^\s*>/.test(l) || l.includes('class="if-bar"') || /\bln-(pg|nt)\b/.test(l)) continue;
+    if (!l || !/^\s*>/.test(l) || l.includes('class="if-bar"') || /\bln-(pg|nt)\b/.test(l) || PIC_LINE.test(l)) continue;
     const t = plainText(l);
     if (!t) continue;
     if (/^-{3,}$/.test(t)) {
@@ -10974,10 +10981,12 @@ function setBoxTextInText(text, id, edit, opts) {
   const link = [];
   const noteBlock = [];
   const tail = [];
+  const pic = [];
   let marker = null;
   for (let i2 = r.start; i2 <= r.end; i2++) {
     const l = lines[i2];
     if (i2 === r.start || (l || "").includes('class="if-bar"')) head.push(l);
+    else if (PIC_LINE.test(l || "")) pic.push(l, ">");
     else if (/\bln-pg\b/.test(l)) link.push(l);
     else if (/\bln-nt\b/.test(l) || isNoteBlank.has(i2)) noteBlock.push(l);
     else if (/^\s*>/.test(l)) {
@@ -10987,7 +10996,7 @@ function setBoxTextInText(text, id, edit, opts) {
   }
   const body = buildBoxBody(edit, { ...opts, marker });
   if (!body.length) return text;
-  lines.splice(r.start, r.end - r.start + 1, ...head, ">", ...body, ">", ...link, ...noteBlock, ...tail);
+  lines.splice(r.start, r.end - r.start + 1, ...head, ">", ...pic, ...body, ">", ...link, ...noteBlock, ...tail);
   return lines.join("\n");
 }
 function setNoteInText(text, id, note) {
@@ -11075,7 +11084,7 @@ function convertBox(text, id, cardId, mk) {
   let out = lines.slice();
   for (let i2 = start + 1; i2 <= end; i2++) {
     const l = lines[i2];
-    if (!l || !/^\s*>/.test(l) || l.includes('class="if-bar"') || /\bln-(pg|nt)\b/.test(l)) continue;
+    if (!l || !/^\s*>/.test(l) || l.includes('class="if-bar"') || /\bln-(pg|nt)\b/.test(l) || PIC_LINE.test(l)) continue;
     const isTr = /\bln-[12]\b/.test(l);
     const plain = plainText(l);
     const at = plain.indexOf(":::");
@@ -11107,7 +11116,7 @@ function convertBox(text, id, cardId, mk) {
     const body = [];
     for (let i2 = r.start + 1; i2 <= r.end; i2++) {
       const l = out[i2];
-      if (/^\s*>/.test(l) && !l.includes('class="if-bar"') && !/\bln-([12]|pg|nt)\b/.test(l) && plainText(l) && !/^-{3,}$/.test(plainText(l))) body.push(i2);
+      if (/^\s*>/.test(l) && !l.includes('class="if-bar"') && !PIC_LINE.test(l) && !/\bln-([12]|pg|nt)\b/.test(l) && plainText(l) && !/^-{3,}$/.test(plainText(l))) body.push(i2);
     }
     if (!body.length) return joined;
     out[body[0]] = addMarker(out[body[0]], cardId);
@@ -12269,7 +12278,7 @@ function makeFreeNote({ page, x: x2, y, color, kind = "md", name = "" }) {
     id: hlId(),
     type: "hl",
     free: true,
-    kind: kind === "table" || kind === "ocr" ? kind : "md",
+    kind: kind === "table" || kind === "ocr" || kind === "img" || kind === "imgocr" ? kind : "md",
     page,
     rects: [{ x: +x2.toFixed(5), y: +y.toFixed(5), w: 4e-4, h: 4e-4 }],
     color: HL_COLORS.includes(color) ? color : "yellow",
@@ -12407,7 +12416,7 @@ var PdfLayers = class {
         }
         const at = icons.get(it.id);
         if (it.note && at) {
-          const freeCls = it.free ? " is-free is-" + (it.kind === "table" ? "table" : it.kind === "ocr" ? "ocr" : "md") : "";
+          const freeCls = it.free ? " is-free is-" + (["table", "ocr", "img", "imgocr"].includes(it.kind) ? it.kind : "md") : "";
           const pin = layer.createDiv({ cls: "if-hl-pin c-" + it.color + freeCls, attr: { "data-hid": it.id, "aria-label": "Open the sticky note" } });
           pin.style.left = pct(at.x);
           pin.style.top = pct(at.y);
@@ -13120,8 +13129,7 @@ var StickyPopups = class {
       const eye = pop.el && pop.el.querySelector(".if-preview");
       if (eye) eye.classList.toggle("is-on", (pop.boxes || []).some((bx) => bx.editing));
     };
-    if (item.free) this.buildFree(pop, item, body, readMarkdown(lines, range), parts);
-    else this.buildText(pop, item, body, parts, file, range, lines);
+    this.buildBody(pop, item, body, lines, range, parts, file);
     const primary = pop.boxes[0];
     pop.ta = primary && primary.ta;
     pop.edit = primary && primary.edit;
@@ -13225,16 +13233,42 @@ var StickyPopups = class {
    *  table and OCR/select kinds, which already hold content of their own - a second "your note" box below it.
    *  (An empty note's single box already IS its note, so it gets no second one.) Both boxes are the same
    *  rendered-Markdown component: shown rendered, a click turns it into an editor, :: makes a flashcard. */
+  /** The picture of an image note, above its text boxes. */
+  renderPopupImage(body, item) {
+    const wrap = body.createDiv({ cls: "if-popup-img" });
+    const f = this.app.vault.getAbstractFileByPath(item.img);
+    if (!f) {
+      wrap.createDiv({ cls: "if-popup-img-missing", text: "Image not found: " + item.img });
+      return;
+    }
+    wrap.createEl("img", { attr: { src: this.app.vault.getResourcePath(f), alt: "", draggable: "false" } });
+  }
+  /** Which kind of note this is: a picture + OCR note is a text note (play buttons, translations) with its picture above. */
+  buildBody(pop, item, body, lines, range, parts, file) {
+    if (item.kind === "imgocr") {
+      this.renderPopupImage(body, item);
+      return this.buildText(pop, item, body, parts, file, range, lines);
+    }
+    if (item.free) return this.buildFree(pop, item, body, readMarkdown(lines, range), parts);
+    return this.buildText(pop, item, body, parts, file, range, lines);
+  }
   buildFree(pop, item, body, md, parts) {
+    let imgLine = "";
+    if (item.img) {
+      const split = axSplitImageMd(md);
+      imgLine = split.line;
+      md = split.rest;
+      this.renderPopupImage(body, item);
+    }
     pop.boxes.push(
       this.mdBox(pop, body, {
         value: md,
         placeholder: "Write Markdown here\u2026  (:: or ::: makes a flashcard)",
         rows: 6,
-        write: (t, v) => setMarkdownInText(t, pop.boxId, v)
+        write: (t, v) => setMarkdownInText(t, pop.boxId, imgLine ? imgLine + (v ? "\n\n" + v : "") : v)
       })
     );
-    if (item.kind === "table" || item.kind === "ocr") {
+    if (item.kind === "table" || item.kind === "ocr" || item.kind === "imgocr") {
       body.createDiv({ cls: "if-popup-note-label", text: "Your note" });
       pop.boxes.push(
         this.mdBox(pop, body, {
@@ -14092,7 +14126,7 @@ function act(target, kind, plugin) {
 }
 
 // src/pdf/dock.js
-var ALWAYS = ["capture", "inserttext", "opennote"];
+var ALWAYS = ["capture", "inserttext", "insertimage", "opennote"];
 var MARGIN = 6;
 var PdfDock = class {
   constructor(plugin, armed) {
@@ -14102,6 +14136,7 @@ var PdfDock = class {
     this.menuOpen = false;
     this.capOpen = false;
     this.stickyOpen = false;
+    this.imageOpen = false;
     this.gridOpen = false;
     this.editOpen = false;
     this.capBar = null;
@@ -14144,6 +14179,7 @@ var PdfDock = class {
     this.menuOpen = false;
     this.capOpen = false;
     this.stickyOpen = false;
+    this.imageOpen = false;
     this.gridOpen = false;
     this.armed.stop();
     if (this.tool) this.tool.stop();
@@ -14155,7 +14191,8 @@ var PdfDock = class {
   }
   /** The text menu is shown while Insert text is on or a text box is selected. */
   textMenuOn() {
-    return !!(this.tool && this.tool.active) || !!(this.tlayer && this.tlayer.sel);
+    const picked = this.tlayer && this.tlayer.selected();
+    return !!(this.tool && this.tool.active) || !!(picked && !picked.img);
   }
   /** Redraw now (something outside changed: auto paste on / off, a recording started...). */
   refresh() {
@@ -14181,6 +14218,7 @@ var PdfDock = class {
       this.menuOpen = false;
       this.capOpen = false;
       this.stickyOpen = false;
+      this.imageOpen = false;
       if (this.placer && this.placer.active) this.placer.stop();
       if (this.tool && this.tool.active) this.tool.stop();
       if (this.capBar) this.capBar.destroy();
@@ -14192,7 +14230,7 @@ var PdfDock = class {
       }
       return;
     }
-    const sig = JSON.stringify([this.buttons().map((a) => a.id), !!this.s.dockCollapsed, this.menuOpen, this.capOpen, this.stickyOpen, this.gridOpen, !!(this.placer && this.placer.active), this.armed.active, this.plugin.timer !== null, this.plugin.capture ? this.plugin.capture.state : "", this.s.hlColor, this.s.hlSticky, this.s.hlNoTranslate, this.s.hlShape, this.editOpen, this.textMenuOn(), this.tool && this.tool.active, this.tlayer && this.tlayer.sel ? JSON.stringify([this.tlayer.sel.id, styleOf(this.tlayer.selected() || {})]) : "", [this.s.txColor, this.s.txSize, this.s.txFont, this.s.txBold, this.s.txItalic, this.s.txAlign, this.s.txBg]]);
+    const sig = JSON.stringify([this.buttons().map((a) => a.id), !!this.s.dockCollapsed, this.menuOpen, this.capOpen, this.stickyOpen, this.imageOpen, this.gridOpen, !!(this.placer && this.placer.active), this.armed.active, this.plugin.timer !== null, this.plugin.capture ? this.plugin.capture.state : "", this.s.hlColor, this.s.hlSticky, this.s.hlNoTranslate, this.s.hlShape, this.editOpen, this.textMenuOn(), this.tool && this.tool.active, this.tlayer && this.tlayer.sel ? JSON.stringify([this.tlayer.sel.id, styleOf(this.tlayer.selected() || {})]) : "", [this.s.txColor, this.s.txSize, this.s.txFont, this.s.txBold, this.s.txItalic, this.s.txAlign, this.s.txBg]]);
     if (this.el && sig === this.sig) return;
     this.render();
     this.sig = sig;
@@ -14221,7 +14259,7 @@ var PdfDock = class {
       b.addEventListener("click", () => this.fold(false));
     } else {
       const GROUPS = [
-        ["sticky", "highlight", "inserttext", "ocr"],
+        ["sticky", "highlight", "inserttext", "insertimage", "ocr"],
         ["translate", "read", "flashcard"],
         ["autopaste", "capture", "opennote", "settings"]
       ];
@@ -14244,6 +14282,9 @@ var PdfDock = class {
           } else if (a.id === "inserttext") {
             b.toggleClass("is-on", !!(this.tool && this.tool.active));
             b.addEventListener("click", () => this.toggleText());
+          } else if (a.id === "insertimage") {
+            b.toggleClass("is-on", this.imageOpen);
+            b.addEventListener("click", () => this.toggleImage());
           } else if (a.id === "capture") {
             b.toggleClass("is-on", this.capOpen);
             b.toggleClass("is-rec", !!(this.plugin.capture && this.plugin.capture.active));
@@ -14270,6 +14311,7 @@ var PdfDock = class {
       f.addEventListener("click", () => this.fold(true));
     }
     if (this.stickyOpen && !this.s.dockCollapsed) this.renderStickyMenu(el);
+    else if (this.imageOpen && !this.s.dockCollapsed) this.renderImageMenu(el);
     else if (this.menuOpen && !this.s.dockCollapsed) this.renderMenu(el);
     if (this.editOpen && !this.s.dockCollapsed) this.renderEditMenu(el);
     else if (this.textMenuOn() && !this.s.dockCollapsed) this.renderTextMenu(el);
@@ -14323,6 +14365,47 @@ var PdfDock = class {
   // ---- the sticky-note menu --------------------------------------------------------------------
   // One menu, like the highlight menu: the two type icons and the colour dots are all shown together -
   // pick a colour whenever you like (it's remembered for next time too), click a type icon to place.
+  // ---- the image menu (Insert image): three ways to put a picture on the page --------------------
+  renderImageMenu(el) {
+    const m = el.createDiv({ cls: "if-dock-menu if-dock-image" });
+    const row = m.createDiv({ cls: "if-dm-row" });
+    const placing = this.placer && this.placer.active ? this.placer.kind : null;
+    const modes = [
+      ["imgraw", "imgraw", "Loose picture on the page, no sticky note: drag it to move, drag its corners to make it smaller or bigger"],
+      ["img", "imgnote", "Picture in a sticky note with a text box under it"],
+      ["imgocr", "imgocr", "Picture in a sticky note, the text of the picture (OCR) in a text box and your note under it"]
+    ];
+    for (const [mode, icon, label] of modes) {
+      const b2 = this.btn(row, icon, label);
+      b2.dataset.mode = mode;
+      b2.toggleClass("is-on", placing === mode);
+      b2.addEventListener("click", () => this.startImage(mode));
+    }
+  }
+  /** Get the picture (clipboard first, else a file you choose), then wait for a click on the page. */
+  async startImage(mode) {
+    if (!this.pdfVisible()) return void new import_obsidian31.Notice("Open a PDF first.");
+    let image = null;
+    try {
+      image = await axAcquireImage(this.plugin);
+    } catch (e) {
+      console.error("[axion] insert image", e);
+    }
+    if (!image) return this.refresh();
+    if (!HL_COLORS.includes(this.stickyColor)) this.stickyColor = HL_COLORS.includes(this.s.hlColor) ? this.s.hlColor : HL_COLORS[0];
+    this.gridOpen = false;
+    this.placer.start(mode, { image, color: this.stickyColor });
+    new import_obsidian31.Notice("Click on the page where the picture should go. Esc cancels.");
+    this.refresh();
+  }
+  toggleImage(force) {
+    if (!this.pdfVisible()) return void new import_obsidian31.Notice("Open a PDF first.");
+    const on = typeof force === "boolean" ? force : !(this.imageOpen || this.placer && this.placer.active);
+    if (on && this.s.dockCollapsed) this.s.dockCollapsed = false;
+    this.closeAll();
+    this.imageOpen = on;
+    this.refresh();
+  }
   renderStickyMenu(el) {
     const m = el.createDiv({ cls: "if-dock-menu if-dock-sticky" });
     const row = m.createDiv({ cls: "if-dm-row" });
@@ -14813,6 +14896,7 @@ var TextLayer = class {
     });
     this.sel = null;
     this.focusId = null;
+    plugin.registerDomEvent(document, "keydown", (e) => this.onKey(e), true);
   }
   /** Redraw the text boxes of the pages of one open PDF entry ({ pdf, container }). */
   sync(entry) {
@@ -14836,6 +14920,7 @@ var TextLayer = class {
     if (this.focusId) this.focusNow();
   }
   paint(el, it) {
+    if (it.img) return this.paintPicture(el, it);
     const sig = sigOf(it);
     const body = el.querySelector(".if-tx-body");
     if (el.dataset.sig !== sig) {
@@ -14855,6 +14940,7 @@ var TextLayer = class {
     el.toggleClass("is-selected", !!(this.sel && this.sel.id === it.id));
   }
   build(layer, pdf, it) {
+    if (it.img) return this.buildPicture(layer, pdf, it);
     const el = layer.createDiv({ cls: "if-tx", attr: { "data-id": it.id } });
     const grab = el.createDiv({ cls: "if-tx-grab", attr: { "aria-label": "Drag to move" } });
     grab.createSpan({ cls: "ico ico-grip" });
@@ -14892,6 +14978,146 @@ var TextLayer = class {
     this.dragger(grab, el, pdf, it.id, "move");
     this.dragger(rs, el, pdf, it.id, "size");
     return el;
+  }
+  // ---- pictures (Insert image > loose picture): they share texts.json and this layer with the texts ----------
+  buildPicture(layer, pdf, it) {
+    const el = layer.createDiv({ cls: "if-tx if-tx-img", attr: { "data-id": it.id } });
+    el.createEl("img", { cls: "if-tx-pic", attr: { alt: "", draggable: "false" } });
+    for (const corner of ["nw", "ne", "sw", "se"]) {
+      const h = el.createDiv({ cls: "if-tx-c if-tx-c-" + corner, attr: { "aria-label": "Drag to make the picture smaller or bigger", "data-corner": corner } });
+      this.scaler(h, el, pdf, it.id, corner);
+    }
+    const del = el.createDiv({ cls: "if-tx-del", attr: { "aria-label": "Delete this picture", title: "Delete this picture", role: "button" } });
+    del.createSpan({ cls: "ico ico-trash" });
+    del.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      this.deselect();
+      this.store.remove(pdf, it.id);
+    });
+    this.mover(el, pdf, it.id);
+    return el;
+  }
+  paintPicture(el, it) {
+    const sig = JSON.stringify([it.x, it.y, it.w, it.img]);
+    if (el.dataset.sig !== sig) {
+      el.dataset.sig = sig;
+      el.style.left = pct2(it.x);
+      el.style.top = pct2(it.y);
+      el.style.width = pct2(it.w);
+      const vault = this.plugin.app.vault;
+      const f = vault.getAbstractFileByPath(it.img);
+      const pic = el.querySelector(".if-tx-pic");
+      if (f) {
+        const url = vault.getResourcePath(f);
+        if (pic.getAttribute("src") !== url) pic.setAttribute("src", url);
+      }
+      el.toggleClass("is-missing", !f);
+    }
+    el.toggleClass("is-selected", !!(this.sel && this.sel.id === it.id));
+  }
+  /** Drag the picture itself to move it (it stays inside the page). */
+  mover(el, pdf, id) {
+    el.addEventListener("pointerdown", (e) => {
+      if (e.button !== 0 && e.pointerType === "mouse") return;
+      if (e.target instanceof Element && e.target.closest(".if-tx-c, .if-tx-del")) return;
+      e.preventDefault();
+      e.stopPropagation();
+      this.select(pdf, id);
+      const box = el.parentElement.getBoundingClientRect();
+      const it = this.store.get(pdf, id);
+      if (!it || !box.width) return;
+      const r = el.getBoundingClientRect();
+      const maxX = Math.max(0, 1 - r.width / box.width);
+      const maxY = Math.max(0, 1 - r.height / box.height);
+      const start = { x: e.clientX, y: e.clientY, ix: it.x, iy: it.y };
+      try {
+        el.setPointerCapture(e.pointerId);
+      } catch (err2) {
+      }
+      let moved = false;
+      const at = (ev) => ({
+        x: Math.min(Math.max(0, start.ix + (ev.clientX - start.x) / box.width), maxX),
+        y: Math.min(Math.max(0, start.iy + (ev.clientY - start.y) / box.height), maxY)
+      });
+      const move = (ev) => {
+        moved = true;
+        const p = at(ev);
+        el.style.left = pct2(p.x);
+        el.style.top = pct2(p.y);
+      };
+      const up = (ev) => {
+        el.removeEventListener("pointermove", move);
+        el.removeEventListener("pointerup", up);
+        el.removeEventListener("pointercancel", up);
+        if (!moved) return;
+        const p = at(ev);
+        this.store.update(pdf, id, { x: +p.x.toFixed(5), y: +p.y.toFixed(5) });
+      };
+      el.addEventListener("pointermove", move);
+      el.addEventListener("pointerup", up);
+      el.addEventListener("pointercancel", up);
+    });
+  }
+  /** Drag a corner: the picture keeps its shape and the opposite corner stays where it is. */
+  scaler(handle, el, pdf, id, corner) {
+    const east = corner.endsWith("e");
+    const south = corner.startsWith("s");
+    handle.addEventListener("pointerdown", (e) => {
+      if (e.button !== 0 && e.pointerType === "mouse") return;
+      e.preventDefault();
+      e.stopPropagation();
+      this.select(pdf, id);
+      const box = el.parentElement.getBoundingClientRect();
+      const it = this.store.get(pdf, id);
+      const start = el.getBoundingClientRect();
+      if (!it || !box.width || !start.width) return;
+      const ratio = it.r || start.height / start.width;
+      const x0 = e.clientX;
+      const left0 = start.left - box.left;
+      const top0 = start.top - box.top;
+      const right0 = start.right - box.left;
+      const bottom0 = start.bottom - box.top;
+      const minW = Math.min(28, box.width);
+      const maxW = Math.max(minW, Math.min(east ? box.width - left0 : right0, (south ? box.height - top0 : bottom0) / ratio));
+      try {
+        handle.setPointerCapture(e.pointerId);
+      } catch (err2) {
+      }
+      const shape = (ev) => {
+        const w = Math.min(Math.max(start.width + (ev.clientX - x0) * (east ? 1 : -1), minW), maxW);
+        const h = w * ratio;
+        return { w, left: east ? left0 : right0 - w, top: south ? top0 : bottom0 - h };
+      };
+      const move = (ev) => {
+        const s = shape(ev);
+        el.style.left = pct2(s.left / box.width);
+        el.style.top = pct2(s.top / box.height);
+        el.style.width = pct2(s.w / box.width);
+      };
+      const up = (ev) => {
+        handle.removeEventListener("pointermove", move);
+        handle.removeEventListener("pointerup", up);
+        handle.removeEventListener("pointercancel", up);
+        const s = shape(ev);
+        this.store.update(pdf, id, { x: +(s.left / box.width).toFixed(5), y: +(s.top / box.height).toFixed(5), w: +(s.w / box.width).toFixed(5) });
+      };
+      handle.addEventListener("pointermove", move);
+      handle.addEventListener("pointerup", up);
+      handle.addEventListener("pointercancel", up);
+    });
+  }
+  /** Delete / Backspace removes the selected picture (not while you type somewhere). */
+  onKey(e) {
+    if (e.key !== "Delete" && e.key !== "Backspace") return;
+    const it = this.selected();
+    if (!it || !it.img) return;
+    const t = e.target;
+    if (t instanceof Element && t.closest("input, textarea, select, [contenteditable='true']")) return;
+    e.preventDefault();
+    const sel = this.sel;
+    this.deselect();
+    this.store.remove(sel.pdf, sel.id);
   }
   read(body) {
     return (body.innerText || body.textContent || "").replace(/ /g, " ").replace(/\n+$/, "");
@@ -15126,6 +15352,7 @@ var Placer = class {
     this.rows = opts.rows || 3;
     this.cols = opts.cols || 3;
     this.color = opts.color || null;
+    this.image = opts.image || null;
     if (this.active) return this.onChange(true);
     this.active = true;
     document.addEventListener("pointerdown", this.h.down, true);
@@ -15181,24 +15408,74 @@ var Placer = class {
     const box = ensureLayer(pageEl).getBoundingClientRect();
     if (!box.width) return;
     const kind = this.kind;
-    const md = kind === "table" ? tableMarkdown(this.rows, this.cols) : "";
+    const image = this.image;
+    this.image = null;
+    if (kind === "imgraw") {
+      this.stop();
+      await this.placePicture(pdf, pageEl, box, x2, y, image);
+      return;
+    }
+    const isImg = kind === "img" || kind === "imgocr";
+    if (isImg && !image) return;
+    let md = kind === "table" ? tableMarkdown(this.rows, this.cols) : "";
     this.stop();
+    let saved = null;
+    let ocrText = "";
+    if (isImg) {
+      saved = await axSaveImage(this.plugin, pdf, image);
+      md = axEmbed(saved.path, Math.min(image.width || 320, 320));
+      if (kind === "imgocr") {
+        try {
+          ocrText = await axOcrImage(this.plugin, image);
+          if (!ocrText) axNotice("No text was found in the picture.", 6e3);
+        } catch (e) {
+          console.error("[axion] OCR of a picture", e);
+          axNotice("OCR: " + (e && e.message ? e.message : e), 9e3);
+        }
+      }
+    }
     await this.plugin.annots.load(pdf);
-    const n2 = this.plugin.annots.items(pdf).filter((i2) => i2.free && i2.kind === (kind === "table" ? "table" : kind)).length + 1;
-    const name = (kind === "table" ? "Table " : "Note ") + n2;
+    const n2 = this.plugin.annots.items(pdf).filter((i2) => i2.free && (isImg ? i2.kind === "img" || i2.kind === "imgocr" : i2.kind === (kind === "table" ? "table" : kind))).length + 1;
+    const name = (kind === "table" ? "Table " : isImg ? "Image " : "Note ") + n2;
     const item = makeFreeNote({ page: Number(pageEl.dataset.pageNumber), x: (x2 - box.left) / box.width, y: (y - box.top) / box.height, color: this.color || this.plugin.settings.hlColor, kind, name });
+    if (isImg) {
+      item.img = saved.path;
+      item.r = +((image.height || 1) / (image.width || 1)).toFixed(5);
+    }
     await this.plugin.annots.add(pdf, item);
     try {
-      await this.plugin.hlFree(pdf, item, md);
+      if (kind === "imgocr") await this.plugin.hlImageOcr(pdf, item, md, ocrText);
+      else await this.plugin.hlFree(pdf, item, md);
     } catch (e) {
       this.plugin.annots.remove(pdf, item.id);
       throw e;
     }
     const popups = this.plugin.hl.popups;
-    popups.editNext = item.id;
+    popups.editNext = kind === "imgocr" ? null : item.id;
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
     const pin = document.querySelector('.if-hl-pin[data-hid="' + item.id + '"]');
     await popups.show(pdf, item.id, pin || { x: x2, y });
+  }
+  /** A loose picture: it lives on the page like an inserted text (texts.json), no sticky note. */
+  async placePicture(pdf, pageEl, box, x2, y, image) {
+    if (!image) return;
+    const saved = await axSaveImage(this.plugin, pdf, image);
+    const r = (image.height || 1) / (image.width || 1);
+    const w = clamp(Math.min(0.3, (image.width || 300) / box.width), 0.06, 1);
+    const h = w * box.width * r / box.height;
+    const item = {
+      id: txId(),
+      page: Number(pageEl.dataset.pageNumber),
+      x: +clamp((x2 - box.left) / box.width, 0, Math.max(0, 1 - w)).toFixed(5),
+      y: +clamp((y - box.top) / box.height, 0, Math.max(0, 1 - h)).toFixed(5),
+      w: +w.toFixed(5),
+      img: saved.path,
+      r: +r.toFixed(5),
+      created: Date.now()
+    };
+    await this.plugin.texts.load(pdf);
+    await this.plugin.texts.add(pdf, item);
+    this.plugin.hl.textLayer.select(pdf, item.id);
   }
 };
 
@@ -15414,6 +15691,9 @@ var HighlightController = class {
   toggleText() {
     this.dock.toggleText();
   }
+  toggleImage() {
+    this.dock.toggleImage();
+  }
   /** The highlight button / command: show the highlight menu and arm the marker (again: put it away). */
   run() {
     this.dock.toggleHighlight();
@@ -15618,12 +15898,14 @@ var pdfModule = {
   },
   commands: [
     { id: "insert-text", name: "Insert text on the PDF", run: (p) => p.hl.toggleText() },
+    { id: "insert-image", name: "Insert an image on the PDF", run: (p) => p.hl.toggleImage() },
     { id: "open-pdf-note", name: "Open the note of this PDF next to it", run: (p) => p.hl.openNote() },
     { id: "highlight-region", name: "Highlight text on the PDF (and make a sticky note)", run: (p) => p.hl.run() }
   ],
   quick: [
     { id: "highlight", icon: "highlight", label: "Highlighter: opens the highlight menu on the PDF (colour, with / without a sticky note); drag over text", run: (p) => p.hl.run() },
     { id: "inserttext", icon: "text", label: "Insert text: click on the PDF page and type; colour, size and font in the menu", run: (p) => p.hl.toggleText() },
+    { id: "insertimage", icon: "image", label: "Insert image: click on the PDF page; a loose picture, a picture in a sticky note, or a picture with its text (OCR)", run: (p) => p.hl.toggleImage() },
     { id: "opennote", icon: "opennote", label: "Open the note of this PDF next to it (split view)", run: (p) => p.hl.openNote() }
   ],
   settings: renderPdfSettings
@@ -15900,6 +16182,165 @@ function renderPreview(el, s) {
   previewBox(el, "sentence", "Sentence", s);
   previewBox(el, "image", "Image", s);
 }
+// src/pdf/images.js
+// Insert image (floating toolbar of a PDF): the picture comes from the clipboard, or from a file you choose.
+var AX_IMG_MIME = { png: "image/png", jpg: "image/jpeg", webp: "image/webp", gif: "image/gif", bmp: "image/bmp" };
+function axNotice(msg, ms) {
+  return new import_obsidian38.Notice(msg, ms);
+}
+function axBytes(buf) {
+  return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
+}
+function axImageExt(name, type) {
+  let ext = ((/\.([a-z0-9]+)$/i.exec(name || "") || [])[1] || "").toLowerCase();
+  if (ext === "jpeg") ext = "jpg";
+  if (AX_IMG_MIME[ext]) return ext;
+  return Object.keys(AX_IMG_MIME).find((k) => AX_IMG_MIME[k] === type) || "png";
+}
+function axPickImageFile() {
+  return new Promise((resolve) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/png,image/jpeg,image/webp,image/gif,image/bmp";
+    input.style.display = "none";
+    let done = false;
+    const onFocus = () => setTimeout(() => {
+      if (!input.files || !input.files.length) finish(null);
+    }, 800);
+    const finish = (v) => {
+      if (done) return;
+      done = true;
+      window.removeEventListener("focus", onFocus);
+      input.remove();
+      resolve(v);
+    };
+    input.addEventListener("change", async () => {
+      const f = input.files && input.files[0];
+      if (!f) return finish(null);
+      try {
+        const ext = axImageExt(f.name, f.type);
+        const data = await f.arrayBuffer();
+        const bmp = await createImageBitmap(new Blob([data], { type: AX_IMG_MIME[ext] }));
+        const out = { data, ext, width: bmp.width, height: bmp.height, from: "file" };
+        bmp.close();
+        finish(out);
+      } catch (e) {
+        finish(null);
+        axNotice("Axion cannot read this file as a picture.", 6e3);
+      }
+    });
+    input.addEventListener("cancel", () => finish(null));
+    document.body.appendChild(input);
+    window.addEventListener("focus", onFocus, { once: true });
+    input.click();
+  });
+}
+/** The picture of the clipboard (if it holds one) and a small dialog to choose between it and a file. */
+var AxImageChoice = class extends import_obsidian38.Modal {
+  constructor(app, clip, plugin, done) {
+    super(app);
+    this.clip = clip;
+    this.plugin = plugin;
+    this.done = done;
+    this.chosen = false;
+    this.url = "";
+  }
+  onOpen() {
+    const el = this.contentEl;
+    el.addClass("ax-imgchoice");
+    el.createEl("h3", { text: "Insert a picture" });
+    const size = this.clip.img.getSize();
+    this.png = this.clip.img.toPNG();
+    this.url = URL.createObjectURL(new Blob([this.png], { type: "image/png" }));
+    el.createDiv({ cls: "ax-imgchoice-preview" }).createEl("img", { attr: { src: this.url, alt: "" } });
+    el.createDiv({ cls: "ax-imgchoice-size", text: "Picture on the clipboard: " + size.width + " \u00D7 " + size.height + " px" });
+    const row = el.createDiv({ cls: "ax-imgchoice-buttons" });
+    const useClip = row.createEl("button", { cls: "mod-cta", text: "Use the clipboard picture" });
+    const useFile = row.createEl("button", { text: "Choose a file\u2026" });
+    useClip.addEventListener("click", () => {
+      this.chosen = true;
+      if (this.plugin) this.plugin.lastImageHash = this.clip.hash;
+      this.done({ data: axBytes(this.png), ext: "png", width: size.width, height: size.height, from: "clipboard" });
+      this.close();
+    });
+    useFile.addEventListener("click", () => {
+      this.chosen = true;
+      const picked = axPickImageFile();
+      this.close();
+      picked.then((r) => this.done(r));
+    });
+    useClip.focus();
+  }
+  onClose() {
+    if (this.url) URL.revokeObjectURL(this.url);
+    this.url = "";
+    this.contentEl.empty();
+    if (!this.chosen) this.done(null);
+  }
+};
+/** No picture on the clipboard: the file dialog opens at once (no await before input.click(): it needs the click).
+ *  A picture on the clipboard: the person chooses between it and a file. */
+async function axAcquireImage(plugin) {
+  let clip = null;
+  try {
+    clip = readClipboardImage2();
+  } catch (e) {
+    clip = null;
+  }
+  if (!clip) return axPickImageFile();
+  return new Promise((resolve) => {
+    try {
+      new AxImageChoice(plugin.app, clip, plugin, resolve).open();
+    } catch (e) {
+      console.error("[axion] picture dialog", e);
+      const size = clip.img.getSize();
+      if (plugin) plugin.lastImageHash = clip.hash;
+      resolve({ data: axBytes(clip.img.toPNG()), ext: "png", width: size.width, height: size.height, from: "clipboard" });
+    }
+  });
+}
+async function axSaveImage(plugin, pdf, image) {
+  const st = await plugin.study.ensure(pdf);
+  const vault = plugin.app.vault;
+  const stamp2 = timestamp();
+  let path = st.images + "/Image " + stamp2 + "." + image.ext;
+  for (let i2 = 2; vault.getAbstractFileByPath(path); i2++) path = st.images + "/Image " + stamp2 + " " + i2 + "." + image.ext;
+  await vault.createBinary(path, image.data);
+  return { st, path };
+}
+function axEmbed(path, width) {
+  return "![[" + path + (width ? "|" + Math.round(width) : "") + "]]";
+}
+/** A picture note keeps its picture as the first line of its Markdown; the text boxes show what comes after it. */
+function axSplitImageMd(md) {
+  const text = String(md || "");
+  const m = /^\s*(!\[\[[^\]\n]+\]\])[ \t]*(?:\n+|$)([\s\S]*)$/.exec(text);
+  return m ? { line: m[1], rest: m[2].replace(/^\n+/, "") } : { line: "", rest: text };
+}
+/** Read the text of a picture with the OCR engine (languages and quality from the OCR settings). */
+async function axOcrImage(plugin, image) {
+  const ocr = plugin.ocr;
+  if (!ocr) throw new Error("OCR is not available.");
+  const s = plugin.settings;
+  const note = axNotice("Reading the picture\u2026", 0);
+  try {
+    const mime = AX_IMG_MIME[image.ext] || "image/png";
+    const bmp = await createImageBitmap(new Blob([image.data], { type: mime }));
+    const longSide = Math.max(bmp.width, bmp.height) || 1;
+    const scale = Math.max(0.5, Math.min(Number(s.ocrScale) || 2, 5e3 / longSide));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(bmp.width * scale));
+    canvas.height = Math.max(1, Math.round(bmp.height * scale));
+    const ctx = canvas.getContext("2d");
+    if (s.ocrEnhance) ctx.filter = "grayscale(1) contrast(1.4)";
+    ctx.drawImage(bmp, 0, 0, canvas.width, canvas.height);
+    bmp.close();
+    return await ocrCanvas(ocr, canvas, { busy: (t) => note.setMessage(t) });
+  } finally {
+    note.hide();
+  }
+}
+
 // src/ui/fonts.js
 // One font list for Persian and Latin fonts. It is used by Settings > Axion > Fonts of sticky notes and cards (sticky notes,
 // popups, flashcard review) and by the font menu of the Insert text tool on a PDF. A font that is not on this computer is
@@ -16301,7 +16742,8 @@ var AX_FA = new Map(Object.entries({
 "Persian fonts": "فونت‌های فارسی",
 "Latin fonts": "فونت‌های لاتین",
 "Your fonts folder": "پوشه fonts شما",
-"⚠ This font is not installed.": "⚠ این فونت نصب نیست."
+"⚠ This font is not installed.": "⚠ این فونت نصب نیست.",
+"Insert image: click on the PDF page; a loose picture, a picture in a sticky note, or a picture with its text (OCR)": "درج عکس: روی صفحه PDF کلیک کنید؛ عکس آزاد، عکس داخل استیک‌نوت، یا عکس همراه متنش (OCR)"
 }));
 var AX_FA_T = [
 [
@@ -17471,6 +17913,40 @@ module.exports = class Axion extends Plugin {
     } catch (e) {
     }
     box += '\n> <span class="ln ln-pg">' + link + " %%hl:" + item.id + "%%</span>";
+    await this.app.vault.process(st.note, (t) => t.replace(/\s*$/, "") + "\n\n" + box + "\n\n");
+    this.annots.update(pdf, item.id, { note: { path: st.notePath, boxId: id } });
+  }
+  /**
+   * A picture note whose text was read by OCR: the picture first, then the text exactly like the sticky note of a highlight -
+   * its translations (languages and engine of the translation settings) and a play button on every line but Persian.
+   * Without any text it is just the picture (like hlFree).
+   */
+  async hlImageOcr(pdf, item, embed, raw) {
+    const text = String(raw || "").replace(/\s+/g, " ").trim();
+    if (!text) return this.hlFree(pdf, item, embed);
+    const st = await this.study.ensure(pdf);
+    const kind = classifyText(text);
+    const enabled = this.enabledSources();
+    const det = detectSource(text, enabled, this.fallbackLang(enabled));
+    const speech = cleanForSpeech(text);
+    const { src, results } = await this.translateForBox(speech, det, this.translationSlots(), enabled);
+    const plan = this.flash.addFromBox({ text: speech || text, lang: src, results, notePath: st.notePath, pdf });
+    const id = boxId();
+    const rows = buildBox(kind, plan ? this.cardBoxLines(text, src, plan) : this.boxLines(text, src, results), {
+      id,
+      cardId: plan ? plan.card.id : void 0,
+      color: item.color
+    }).split("\n");
+    const bar = rows.findIndex((l) => l.includes('class="if-bar"'));
+    rows.splice(bar + 2, 0, "> " + embed, ">");
+    let box = rows.join("\n");
+    const file = this.app.vault.getAbstractFileByPath(pdf);
+    let link = "[[" + pdf.split("/").pop() + "#page=" + item.page + "|p. " + item.page + "]]";
+    try {
+      if (file) link = this.app.fileManager.generateMarkdownLink(file, st.notePath, "#page=" + item.page + "&ifhl=" + item.id, "p. " + item.page).replace(/^!/, "");
+    } catch (e) {
+    }
+    box += '\n>\n> <span class="ln ln-pg">' + link + " %%hl:" + item.id + "%%</span>";
     await this.app.vault.process(st.note, (t) => t.replace(/\s*$/, "") + "\n\n" + box + "\n\n");
     this.annots.update(pdf, item.id, { note: { path: st.notePath, boxId: id } });
   }
